@@ -20,6 +20,21 @@ Could you please let me know if there are any errors in my English or code?</p>
 <p>英会話の練習をしたい、自分のためのアプリです。</p>
 
 
+## 基本機能
+<ul>
+<li>質問・回答例の登録</li>
+<li>質問・回答例の編集</li>
+<li>質問・回答例の削除</li>
+<li>練習（ランダム）</li>
+<li>練習（もう一度）</li>
+<li>練習（リスト）</li>
+<li>設定（音声）</li>
+<li>設定（カテゴリ名）</li>
+<li>設定（リスト新規登録）</li>
+<li>設定（リスト編集）</li>
+<li>設定（リスト削除）</li>
+</ul>
+
 ## 大まかなイメージ
 
 | 練習1 | 練習2 |  |
@@ -36,15 +51,19 @@ Could you please let me know if there are any errors in my English or code?</p>
 
 | 設定 |  |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/880fdbf3-6772-47d2-a7b1-16e3a5928613" width="200"> |  |  |
+| <img src="https://github.com/user-attachments/assets/59fc7632-e8cd-4004-b2d8-886506638b24" width="200"> |  |  |
 
 | カテゴリ名の設定 |  |  |
 | ---- | ---- | ---- |
 | <img src="https://github.com/user-attachments/assets/3bf9c90f-01d1-4350-bddf-fb05bf712711" width="200"> |  |  |
 
-| リストの設定 | リストの設定 |  |
+| リストの新規登録 | リストの新規登録 |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/84da23e7-38dd-4006-b93b-4f2effa4d151" width="200"> | <img src="https://github.com/user-attachments/assets/c927b6c1-e893-4119-b428-22473a24cad5" width="200"> |  |
+| <img src="https://github.com/user-attachments/assets/98efce34-b515-404e-a152-87bde5aa5b26" width="200"> | <img src="https://github.com/user-attachments/assets/9820163c-82c4-4fcc-a9e2-80449c930ad7" width="200"> |  |
+
+| リストの編集・削除 |  |  |
+| ---- | ---- | ---- |
+| <img src="https://github.com/user-attachments/assets/ec8aa312-7a48-45d1-ab62-75acbd5dd013" width="200"> |  |  |
 
 | 音声の設定 |  |  |
 | ---- | ---- | ---- |
