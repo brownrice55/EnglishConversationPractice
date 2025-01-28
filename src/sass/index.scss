@@ -1,0 +1,139 @@
+@use 'sass:math';
+@use '_destyle';
+
+$colorFont: #333;
+$colorKeyRight: #eee;
+$colorKeyDark: #666;
+
+@function rem($px) {
+  @return math.div($px, 16px) * 1rem;
+}
+
+body {
+  font-size: rem(16px);
+  line-height: 1.4;
+  color: $colorFont;
+  margin: 0 auto;
+  padding: 0 auto;
+  text-align: center;
+}
+.header {
+  display: flex;
+  justify-content:space-between;
+  background: $colorKeyRight;
+  padding: 10px;
+  &__appTitle {
+    font-size: rem(14px);
+    vertical-align: center;
+  }
+  &__nav {
+    span {
+      cursor: pointer;
+    }
+    ul {
+      display: none;
+    }
+  }
+}
+.main {
+  margin: 0 auto;
+  padding: 0 auto;
+  text-align: center;
+  &__title {
+    font-size: rem(18px);
+    font-weight: 200;
+  }
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+    ul {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      li {
+        display: inline-block;
+        cursor: pointer;
+        padding: 10px 20px;
+        border-right: 1px solid $colorKeyDark;
+      }  
+    }
+    &--active {
+      background: $colorKeyDark;
+      color: $colorKeyRight;
+    }
+  }
+  &__description {
+    background: $colorKeyDark;
+    color: $colorKeyRight;
+    padding: 10px;
+    font-size: rem(14px);
+    select {
+      float: right;
+    }
+    p {
+      text-align: left;
+    }
+  }
+  &__contents {
+    padding: 30px;
+    &__orderedList {
+      padding: 10px;
+      counter-reset: number 0;
+      li {
+        position: relative;
+        padding: 10px 10px 10px 40px;
+        text-align: left;
+        &:before{
+          position: absolute;
+          counter-increment: number 1;
+          content: counter(number);
+          display:inline-block;
+          background: $colorKeyDark;
+          color: $colorKeyRight;
+          font-weight: 200;
+          left: 0;
+          width: 24px;
+          height: 24px;
+          line-height: 24px;
+          text-align: center;
+          vertical-align: center;
+        }
+      }
+    }
+    &__onOff {
+
+    }
+    button {
+      background: $colorKeyDark;
+      color: $colorKeyRight;
+      padding: 10px 20px;
+      margin: 20px;
+    }
+    textarea {
+      border: 1px solid $colorKeyDark;
+      background: $colorKeyRight;
+      width: 90%;
+      text-align: left;
+      padding: 10px;
+    }
+    input[type="text"] {
+      border: 1px solid $colorKeyDark;
+      background: $colorKeyRight;
+      width: 90%;
+      text-align: left;
+      padding: 10px;
+    }
+  }
+  &__list {
+    >li {
+      padding: 10px;
+      border-bottom: 1px solid $colorKeyRight;
+      cursor: pointer;
+    }
+  }
+}
+
+
+.disp--none {
+  display: none;
+}

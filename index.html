@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./dest/css/index.css" rel="stylesheet">
+  <title>英会話練習アプリ</title>
+</head>
+<body>
+  <header class="header">
+    <h1 class="header__appTitle">英会話練習アプリ</h1>
+    <nav class="header__nav">
+      <span>■</span>
+      <ul>
+        <li>練習</li>
+        <li>新規登録</li>
+        <li>編集・削除</li>
+        <li>設定</li>
+      </ul>
+    </nav>
+  </header>
+  <main class="main">
+    <section class="js-practice disp--none">
+      <nav class="main__nav">
+        <h2 class="main__title">練習</h2>
+        <ul>
+          <li class="main__nav--active">ランダム</li>
+          <li>もう一度</li>
+          <li>リスト</li>
+        </ul>
+      </nav>
+      <div class="main__description">
+        <div>
+          <p>登録した質問をランダムで出題します。<br>
+            音声の後に質問に答えてください。</p>
+            <select name="" id=""></select>
+        </div>
+      </div>
+      <div class="main__contents disp--none">
+        <p>Q. 質問（英文）</p>
+        <i></i>
+        <button>回答例を見る</button>
+        <div class="disp--none">
+          回答例（英文）
+        </div>
+      </div>
+      <div class="main__contents disp--none">
+        <p>Q. 質問（英文）</p>
+        <i></i>
+        <button>回答例を見る</button>
+        <div class="disp--none">
+          回答例（英文）
+        </div>
+      </div>
+      <div class="main__contents">
+        <span>リスト</span>
+        <select name="" id="">
+          <option value="">リスト名が入ります</option>
+          <option value="">リスト名が入ります</option>
+          <option value="">リスト名が入ります</option>
+        </select>
+        <button>スタート</button>
+      </div>
+    </section>
+    <section class="js-addNew">
+      <nav class="main__nav">
+        <h2 class="main__title">質問と回答の登録</h2>
+      </nav>
+      <div class="main__contents">
+        <div>
+          <h3>質問（英語）</h3>
+          <textarea name="" id=""></textarea>
+        </div>
+        <div>
+          <h3>質問（日本語）</h3>
+          <textarea name="" id=""></textarea>
+        </div>
+        <div>
+          <h3>回答例（英語）</h3>
+          <textarea name="" id=""></textarea>
+        </div>
+        <div>
+          <h3>回答例（日本語）</h3>
+          <textarea name="" id=""></textarea>
+        </div>
+        <button>登録する</button>
+      </div>
+    </section>
+    <section class="js-editAndDelete disp--none">
+      <nav class="main__nav">
+        <h2 class="main__title">編集・削除</h2>
+      </nav>
+      <div class="main__contents">
+        <ul>
+          <li>英文の質問が入ります。
+            <span>編集</span>
+            <span>削除</span>
+          </li>
+          <li>英文の質問が入ります。
+            <span>編集</span>
+            <span>削除</span>
+          </li>
+          <li>英文の質問が入ります。
+            <span>編集</span>
+            <span>削除</span>
+          </li>
+          <li>英文の質問が入ります。
+            <span>編集</span>
+            <span>削除</span>
+          </li>
+          <li>英文の質問が入ります。
+            <span>編集</span>
+            <span>削除</span>
+          </li>
+          <li>英文の質問が入ります。
+            <span>編集</span>
+            <span>削除</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <section class="js-settings disp--none">
+      <nav class="main__nav">
+        <h2 class="main__title">設定</h2>
+      </nav>
+      <div class="main__contents disp--none">
+        <ul class="main__list">
+          <li>音声設定</li>
+          <li>カテゴリ名の設定</li>
+          <li>リストの新規登録</li>
+          <li>リストの編集・削除</li>
+        </ul>
+      </div>
+      <div class="main__contents disp--none">
+        <div>
+          <h3>自動音声設定</h3>
+          <select name="" id="">
+            <option value="">英語（イギリス）</option>
+          </select>
+        </div>
+        <div class="main__contents__onOff">
+          <input type="checkbox" name="" id="">
+        </div>
+        <button>設定する</button>
+      </div>
+      <div class="main__contents disp--none">
+        <h2>カテゴリ名を登録</h2>
+        <input type="text" name="" id="">
+        <button>カテゴリを追加する</button>
+        <button>登録する</button>
+      </div>
+      <div class="main__contents disp--none">
+        <h2>リスト名</h2>
+        <input type="text" name="" id="">
+        <ol class="main__contents__orderedList">
+          <li>Hi!<span>削除</span></li>
+          <li>英文の質問が入ります。<span>削除</span></li>
+          <li>英文の質問が入ります。<span>削除</span></li>
+          <li>英文の質問が入ります。<span>削除</span></li>
+          <li>英文の質問が入ります。<span>削除</span></li>
+        </ol>
+        <button>質問を追加する</button>
+      </div>
+      <div class="main__contents disp--none">
+        <ul>
+          <li>
+            リスト名が入ります。
+            <button>編集</button>
+            <button>削除</button>
+          </li>
+          <li>
+            リスト名が入ります。
+            <button>編集</button>
+            <button>削除</button>
+          </li>
+          <li>
+            リスト名が入ります。
+            <button>編集</button>
+            <button>削除</button>
+          </li>
+          <li>
+            リスト名が入ります。
+            <button>編集</button>
+            <button>削除</button>
+          </li>
+          <li>
+            リスト名が入ります。
+            <button>編集</button>
+            <button>削除</button>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+  <footer></footer>
+</body>
+</html>

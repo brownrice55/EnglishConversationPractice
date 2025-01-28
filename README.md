@@ -68,3 +68,8 @@ Could you please let me know if there are any errors in my English or code?</p>
 | 音声の設定 |  |  |
 | ---- | ---- | ---- |
 | <img src="https://github.com/user-attachments/assets/77037d17-d5a8-44c5-b5ca-09f8c3a03433" width="200"> |  |  |
+
+## reset css
+<ul>
+  <li>https://github.com/nicolas-cusan/destyle.css</li>
+</ul>
