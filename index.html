@@ -62,28 +62,32 @@
         <button>スタート</button>
       </div>
     </section>
-    <section class="js-addNew">
+    <section class="js-registerQA">
       <nav class="main__nav">
         <h2 class="main__title">質問と回答の登録</h2>
       </nav>
       <div class="main__contents">
-        <div>
-          <h3>質問（英語）</h3>
+        <div class="main__contents__textarea">
+          <h3>質問（英語）<span class="required">※</span></h3>
           <textarea name="" id=""></textarea>
         </div>
-        <div>
-          <h3>質問（日本語）</h3>
-          <textarea name="" id=""></textarea>
+        <div class="main__contents__textarea js-registerQAanswerDiv">
+          <h3>回答例（英語）<span class="required">※</span></h3>
+          <textarea name="" id=""></textarea> 
         </div>
-        <div>
-          <h3>回答例（英語）</h3>
-          <textarea name="" id=""></textarea>
+        <div class="main__contents__btn--right">
+          <button>回答例を追加する</button>
+        </div> 
+        <div class="main__contents__select">
+          <h3>カテゴリ</h3>
+          <select name="" id="" class="js-registerQAcategorySelect">
+            <option value="hobby">趣味に関する会話</option>
+            <option value="job">仕事に関する会話</option>
+          </select>
         </div>
-        <div>
-          <h3>回答例（日本語）</h3>
-          <textarea name="" id=""></textarea>
+        <div class="main__contents__btn--center">
+          <button>登録する</button>
         </div>
-        <button>登録する</button>
       </div>
     </section>
     <section class="js-editAndDelete disp--none">
@@ -192,6 +196,6 @@
       </div>
     </section>
   </main>
-  <footer></footer>
+  <script src="./dest/js/index.js"></script>
 </body>
 </html>

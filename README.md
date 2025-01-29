@@ -47,7 +47,7 @@ Could you please let me know if there are any errors in my English or code?</p>
 
 | 登録 | 編集・削除 |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/ec44e3eb-01a5-4944-9d40-e1d3046e9f3e" width="200"> | <img src="https://github.com/user-attachments/assets/9bd2fe4c-a4a9-40a0-8f7d-5d561283ff58" width="200"> |  |
+| <img src="https://github.com/user-attachments/assets/0b7c61d2-0fe3-4442-af06-0c99c1c261c1" width="200"> | <img src="https://github.com/user-attachments/assets/c94b463d-2deb-4aee-a9ac-883c624f1df1" width="200"> |  |
 
 | 設定 |  |  |
 | ---- | ---- | ---- |
@@ -68,6 +68,11 @@ Could you please let me know if there are any errors in my English or code?</p>
 | 音声の設定 |  |  |
 | ---- | ---- | ---- |
 | <img src="https://github.com/user-attachments/assets/77037d17-d5a8-44c5-b5ca-09f8c3a03433" width="200"> |  |  |
+
+## references
+<ul>
+  <li>https://codepen.io/vkjgr/details/VYMeXp</li>
+</ul>
 
 ## reset css
 <ul>

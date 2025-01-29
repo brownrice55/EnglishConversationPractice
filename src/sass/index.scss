@@ -4,9 +4,16 @@
 $colorFont: #333;
 $colorKeyRight: #eee;
 $colorKeyDark: #666;
+$colorAttention: #f66;
 
 @function rem($px) {
   @return math.div($px, 16px) * 1rem;
+}
+@mixin btn {
+  background: $colorKeyDark;
+  color: $colorKeyRight;
+  padding: 10px 20px;
+  margin: 20px;
 }
 
 body {
@@ -75,7 +82,10 @@ body {
     }
   }
   &__contents {
-    padding: 30px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    padding: 0 5%;
     &__orderedList {
       padding: 10px;
       counter-reset: number 0;
@@ -103,23 +113,64 @@ body {
     &__onOff {
 
     }
-    button {
-      background: $colorKeyDark;
-      color: $colorKeyRight;
-      padding: 10px 20px;
-      margin: 20px;
-    }
-    textarea {
-      border: 1px solid $colorKeyDark;
-      background: $colorKeyRight;
-      width: 90%;
+    &__textarea {
       text-align: left;
-      padding: 10px;
+      margin: 15px 0 0;
+      textarea {
+        border: 1px solid $colorKeyDark;
+        background: $colorKeyRight;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+        margin: 0 0 10px;
+      }
+    }
+    &__select {
+      text-align: left;
+      margin: 15px 0 0;
+      select {
+        width: 100%;
+        border: 1px solid $colorKeyDark;
+        display: block;
+        padding: 10px 80px 10px 20px;
+        margin: 0;
+        box-sizing: border-box;
+        background-image:
+        linear-gradient(45deg, transparent 50%, $colorKeyDark 50%),
+        linear-gradient(135deg, $colorKeyDark 50%, transparent 50%),
+        linear-gradient(to right, $colorKeyDark, $colorKeyDark);
+        background-position:
+          calc(100% - 20px) 20px,
+          calc(100% - 15px) 20px,
+          calc(100% - 40px) 10px;
+        background-size:
+          5px 5px,
+          5px 5px,
+          1px 25px;
+        background-repeat: no-repeat;
+        &:focus {
+          outline: none;
+        }
+      }
+    }
+    &__btn {
+      &--center {
+        text-align: center;
+        button {
+          @include btn;
+        }
+      }
+      &--right {
+        text-align: right;
+        button {
+          @include btn;
+        }
+      }
     }
     input[type="text"] {
       border: 1px solid $colorKeyDark;
       background: $colorKeyRight;
-      width: 90%;
+      width: 100%;
       text-align: left;
       padding: 10px;
     }
@@ -136,4 +187,8 @@ body {
 
 .disp--none {
   display: none;
+}
+.required {
+  color: $colorAttention;
+  font-size: rem(12px);
 }
