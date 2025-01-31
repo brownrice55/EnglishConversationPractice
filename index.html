@@ -23,7 +23,7 @@
     <section class="js-practice disp--none">
       <nav class="main__nav">
         <h2 class="main__title">練習</h2>
-        <ul>
+        <ul class="js-tabUl">
           <li class="main__nav--active">ランダム</li>
           <li>もう一度</li>
           <li>リスト</li>
@@ -64,9 +64,16 @@
     </section>
     <section class="js-registerQA">
       <nav class="main__nav">
-        <h2 class="main__title">質問と回答の登録</h2>
+        <ul class="js-tabUl">
+          <li class="active" data-index="0">
+            <h2 class="main__title">質問と回答の新規登録</h2>
+          </li>
+          <li data-index="1">
+            <h2 class="main__title">一覧</h2>
+          </li>
+        </ul>
       </nav>
-      <div class="main__contents">
+      <div class="main__contents js-contentsDiv">
         <div class="main__contents__textarea">
           <h3>質問（英語）<span class="required">※</span></h3>
           <textarea name="" id=""></textarea>
@@ -86,41 +93,14 @@
           </select>
         </div>
         <div class="main__contents__btn--center">
+          <button class="disp--none">キャンセル</button>
           <button>登録する</button>
         </div>
       </div>
-    </section>
-    <section class="js-editAndDelete disp--none">
-      <nav class="main__nav">
-        <h2 class="main__title">編集・削除</h2>
-      </nav>
-      <div class="main__contents">
-        <ul>
-          <li>英文の質問が入ります。
-            <span>編集</span>
-            <span>削除</span>
-          </li>
-          <li>英文の質問が入ります。
-            <span>編集</span>
-            <span>削除</span>
-          </li>
-          <li>英文の質問が入ります。
-            <span>編集</span>
-            <span>削除</span>
-          </li>
-          <li>英文の質問が入ります。
-            <span>編集</span>
-            <span>削除</span>
-          </li>
-          <li>英文の質問が入ります。
-            <span>編集</span>
-            <span>削除</span>
-          </li>
-          <li>英文の質問が入ります。
-            <span>編集</span>
-            <span>削除</span>
-          </li>
-        </ul>
+      <div class="main__contents js-contentsDiv disp--none">
+        <div class="main__contents">
+          <ul class="main__contents__list js-qalistDataUl"></ul>
+        </div>
       </div>
     </section>
     <section class="js-settings disp--none">

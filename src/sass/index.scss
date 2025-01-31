@@ -2,18 +2,20 @@
 @use '_destyle';
 
 $colorFont: #333;
-$colorKeyRight: #eee;
+$colorWhite: #fff;
+$colorKeyLight: #eee;
 $colorKeyDark: #666;
 $colorAttention: #f66;
 
 @function rem($px) {
   @return math.div($px, 16px) * 1rem;
 }
-@mixin btn {
+@mixin btn($fontSize, $padding, $margin) {
   background: $colorKeyDark;
-  color: $colorKeyRight;
-  padding: 10px 20px;
-  margin: 20px;
+  color: $colorKeyLight;
+  padding: $padding;
+  margin: $margin;
+  font-size: rem($fontSize);
 }
 
 body {
@@ -27,7 +29,7 @@ body {
 .header {
   display: flex;
   justify-content:space-between;
-  background: $colorKeyRight;
+  background: $colorKeyLight;
   padding: 10px;
   &__appTitle {
     font-size: rem(14px);
@@ -53,6 +55,7 @@ body {
   &__nav {
     display: flex;
     justify-content: space-between;
+    background: $colorKeyLight;
     ul {
       display: flex;
       margin: 0;
@@ -61,17 +64,17 @@ body {
         display: inline-block;
         cursor: pointer;
         padding: 10px 20px;
-        border-right: 1px solid $colorKeyDark;
+        color: $colorFont;
+        &.active {
+          background: $colorWhite;
+          color: $colorFont;
+        }
       }  
-    }
-    &--active {
-      background: $colorKeyDark;
-      color: $colorKeyRight;
     }
   }
   &__description {
     background: $colorKeyDark;
-    color: $colorKeyRight;
+    color: $colorKeyLight;
     padding: 10px;
     font-size: rem(14px);
     select {
@@ -99,7 +102,7 @@ body {
           content: counter(number);
           display:inline-block;
           background: $colorKeyDark;
-          color: $colorKeyRight;
+          color: $colorKeyLight;
           font-weight: 200;
           left: 0;
           width: 24px;
@@ -118,7 +121,7 @@ body {
       margin: 15px 0 0;
       textarea {
         border: 1px solid $colorKeyDark;
-        background: $colorKeyRight;
+        background: $colorKeyLight;
         width: 100%;
         text-align: left;
         padding: 10px;
@@ -128,7 +131,7 @@ body {
     &__select {
       text-align: left;
       margin: 15px 0 0;
-      select {
+      select { /*! Copyright (c) 2025 by Veiko (https://codepen.io/vkjgr/pen/VYMeXp) */
         width: 100%;
         border: 1px solid $colorKeyDark;
         display: block;
@@ -157,36 +160,41 @@ body {
       &--center {
         text-align: center;
         button {
-          @include btn;
+          @include btn(16px, 10px 20px, 20px);
         }
       }
       &--right {
         text-align: right;
         button {
-          @include btn;
+          @include btn(16px, 10px 20px, 20px);
         }
       }
     }
     input[type="text"] {
       border: 1px solid $colorKeyDark;
-      background: $colorKeyRight;
+      background: $colorKeyLight;
       width: 100%;
       text-align: left;
       padding: 10px;
     }
-  }
-  &__list {
-    >li {
-      padding: 10px;
-      border-bottom: 1px solid $colorKeyRight;
-      cursor: pointer;
+    &__list {
+      margin: 30px 0 0;
+      >li {
+        padding: 10px;
+        border-bottom: 1px solid $colorKeyLight;
+        cursor: pointer;
+        text-align: left;
+        display: flex;
+        align-items:stretch;
+        justify-content:space-between;
+      }
     }
   }
 }
 
 
 .disp--none {
-  display: none;
+  display: none !important;
 }
 .required {
   color: $colorAttention;
