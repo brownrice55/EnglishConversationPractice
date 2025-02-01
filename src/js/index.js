@@ -30,7 +30,7 @@
     this.textareaValue = '';
 
     this.tabLiQaElms = tabUlElmsGlobal[1].querySelectorAll('li');
-    this.contentsDivElms = document.querySelectorAll('.js-contentsDiv');
+    this.contentsDivElms = document.querySelectorAll('.js-registerQAcontentsDiv');
     this.tabIndexArray = [[1,0],[0,1]];
     
     if(this.qaData.size==0) {
@@ -68,43 +68,32 @@
   };
 
   QaDataManagement.prototype.editQaData = function() {
-    const that = this;
-    this.listDataElms = this.qalistDataUl.childNodes;
-    this.qaListId = 0;
-    for(let cnt=0,len=this.listDataElms.length;cnt<len;++cnt) {
-      this.listDataElms[cnt].addEventListener('click', function() {
-        that.qaListId = Math.trunc(this.dataset.index);
-        that.contentsDivElms[1].classList.add('disp--none');
-        that.contentsDivElms[0].classList.remove('disp--none');
-        let selectedData = that.qaData.get(that.qaListId);
-        that.registerQaTextAreaElms = that.registerQaElm.querySelectorAll('textarea');
-        that.registerQaTextAreaElms[0].value = selectedData.question;
-        that.registerQaTextAreaElms[1].value = selectedData.answer[0];
-        let selectedDataAnswerArrayLength = selectedData.answer.length;
-        for(let cnt2=1;cnt2<selectedDataAnswerArrayLength;++cnt2) {
-          that.textareaValue = selectedData.answer[cnt2];
-          that.addQaAnswerTextarea();
-        }
-        that.registerQaCategorySelectElm.value = selectedData.category;
-        that.textareaValue = '';
-        that.resisterQaBtnRegisterElm.innerHTML = '上書き保存する';
-        that.resisterQaBtnCancelElm.classList.remove('disp--none');
-      });
+    this.contentsDivElms[1].classList.add('disp--none');
+    this.contentsDivElms[0].classList.remove('disp--none');
+    let selectedData = this.qaData.get(this.qaListId);
+    this.registerQaTextAreaElms = this.registerQaElm.querySelectorAll('textarea');
+    this.registerQaTextAreaElms[0].value = selectedData.question;
+    this.registerQaTextAreaElms[1].value = selectedData.answer[0];
+    let selectedDataAnswerArrayLength = selectedData.answer.length;
+    for(let cnt2=1;cnt2<selectedDataAnswerArrayLength;++cnt2) {
+      this.textareaValue = selectedData.answer[cnt2];
+      this.addQaAnswerTextarea();
     }
-    this.resisterQaBtnCancelElm.addEventListener('click', function() {
-      that.contentsDivElms[0].classList.add('disp--none');
-      that.contentsDivElms[1].classList.remove('disp--none');
-      that.reset();
-    });
+    this.registerQaCategorySelectElm.value = selectedData.category;
+    this.textareaValue = '';
+    this.resisterQaBtnRegisterElm.innerHTML = '上書き保存する';
+    this.resisterQaBtnCancelElm.classList.remove('disp--none');
   };
 
   QaDataManagement.prototype.displayQuestionList = function() {
     let listQaData = '';
     this.qaData.forEach((value, key) => {
-      listQaData += '<li data-index="' + key + '"><p>' + value.question + '</p><span>…</span></li>';
+      listQaData += '<li data-index="' + key + '"><p>' + value.question + '</p><div class="main__contents__list__rightMenu"><button>…</button><ul class="disp--none"><li class="js-editLi">編集</li><li class="js-deleteLi">削除</li></ul></div></li>';
     });
     this.qalistDataUl.innerHTML = listQaData;
-    this.editQaData();
+    this.listDataElms = this.qalistDataUl.querySelectorAll('p');
+    this.listDataRightMenuElms = this.qalistDataUl.querySelectorAll('button');
+    this.qaListId = 0;
   };
 
   QaDataManagement.prototype.switchTabs = function() {
@@ -141,6 +130,34 @@
         that.reset();
       });  
     }
+
+    for(let cnt=0,len=this.listDataElms.length;cnt<len;++cnt) {
+      this.listDataElms[cnt].addEventListener('click', function() {
+        that.qaListId = Math.trunc(this.parentNode.dataset.index);
+        that.editQaData();
+      });
+      this.listDataRightMenuElms[cnt].addEventListener('click', function() {
+        this.nextSibling.classList.remove('disp--none');
+      });
+
+      this.editLiElms = document.querySelectorAll('.js-editLi');
+      this.deleteLiElms = document.querySelectorAll('.js-deleteLi');
+      this.editLiElms[cnt].addEventListener('click', function() {
+        that.qaListId = Math.trunc(this.parentNode.parentNode.parentNode.dataset.index);
+        that.editQaData();
+        this.parentNode.classList.add('disp--none');
+      }); 
+      this.deleteLiElms[cnt].addEventListener('click', function() {
+        console.log('delete');
+        this.parentNode.classList.add('disp--none');
+      }); 
+    }
+    this.resisterQaBtnCancelElm.addEventListener('click', function() {
+      that.contentsDivElms[0].classList.add('disp--none');
+      that.contentsDivElms[1].classList.remove('disp--none');
+      that.reset();
+    });
+
   };
 
   QaDataManagement.prototype.run = function() {

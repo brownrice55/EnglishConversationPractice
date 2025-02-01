@@ -47,7 +47,7 @@ Could you please let me know if there are any errors in my English or code?</p>
 
 | 登録 | 編集・削除 |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/0b7c61d2-0fe3-4442-af06-0c99c1c261c1" width="200"> | <img src="https://github.com/user-attachments/assets/c94b463d-2deb-4aee-a9ac-883c624f1df1" width="200"> |  |
+| <img src="https://github.com/user-attachments/assets/0b7c61d2-0fe3-4442-af06-0c99c1c261c1" width="200"> | <img src="https://github.com/user-attachments/assets/7de56c16-4171-42e4-b0fc-1e4f11c2fabd" width="200"> |  |
 
 | 設定 |  |  |
 | ---- | ---- | ---- |
