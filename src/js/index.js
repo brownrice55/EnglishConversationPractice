@@ -42,6 +42,7 @@
     }
 
     this.qalistDataUl = document.querySelector('.js-qalistDataUl');
+    this.isPopupOpen = false;
   };
 
   QaDataManagement.prototype.saveQaData = function() {
@@ -58,7 +59,7 @@
     this.qaData.set(id, { question:this.registerQaTextAreaElms[0].value, answer:answerArray, category:this.registerQaCategorySelectElm.value});
     localStorage.setItem('qaData', JSON.stringify([...this.qaData]));
     localStorage.setItem('tabQa', this.tabIndexNo);
-    window.location.reload(false);
+    window.location.reload(false); // **後で見直し
   };
 
   QaDataManagement.prototype.addQaAnswerTextarea = function() {
@@ -88,12 +89,52 @@
   QaDataManagement.prototype.displayQuestionList = function() {
     let listQaData = '';
     this.qaData.forEach((value, key) => {
-      listQaData += '<li data-index="' + key + '"><p>' + value.question + '</p><div class="main__contents__list__rightMenu"><button>…</button><ul class="disp--none"><li class="js-editLi">編集</li><li class="js-deleteLi">削除</li></ul></div></li>';
+      listQaData += '<li data-index="' + key + '"><p class="js-listQuestion">' + value.question + '</p><div class="main__contents__list__rightMenu"><button class="js-listRightMenuBtn">…</button><ul class="js-listRightMenuUl disp--none"><li class="js-editLi">編集</li><li class="js-deleteLi">削除</li></ul><div class="js-popup disp--none main__contents__list__popup"><div><p>「' + value.question + '」を削除しますか？</p><button class="js-popupCancleBtn">キャンセル</button><button class="js-popupDeleteBtn">削除する</button></div></div></div></li>';
     });
     this.qalistDataUl.innerHTML = listQaData;
-    this.listDataElms = this.qalistDataUl.querySelectorAll('p');
-    this.listDataRightMenuElms = this.qalistDataUl.querySelectorAll('button');
+    this.listDataElms = this.qalistDataUl.querySelectorAll('.js-listQuestion');
+    this.listDataRightMenuElms = this.qalistDataUl.querySelectorAll('.js-listRightMenuBtn');
     this.qaListId = 0;
+  };
+
+  QaDataManagement.prototype.displayPopupWindow = function() {
+    const that = this;
+    let popupElms = document.querySelectorAll('.js-popup');
+    let popupCancelBtnElms = document.querySelectorAll('.js-popupCancleBtn');
+    let popupDeleteBtnElms = document.querySelectorAll('.js-popupDeleteBtn');
+    this.isPopupOpen = true;
+
+    popupElms[(this.qaListId-1)].classList.remove('disp--none');
+    for(let cnt=0,len=popupElms.length;cnt<len;++cnt) {
+      popupCancelBtnElms[cnt].addEventListener('click', function() {
+        this.parentNode.parentNode.classList.add('disp--none');
+      });
+      popupDeleteBtnElms[cnt].addEventListener('click', function() {
+        that.qaData.delete(that.qaListId);
+        let qaData = new Map();
+        let id = 0;
+        that.qaData.forEach((value) => {
+          ++id;
+          qaData.set(id, { question:value.question, answer:value.answer, category:value.category });
+        });
+        localStorage.setItem('qaData', JSON.stringify([...qaData]));
+        localStorage.setItem('tabQa', that.tabIndexNo);
+        window.location.reload(false); // **後で見直し
+        // this.parentNode.parentNode.classList.add('disp--none'); **後で
+        // that.qaData = qaData;
+        // that.displayQuestionList();　**後で
+      });
+    }
+    
+    window.addEventListener('click', function() {
+      if(that.isPopupOpen) {
+        if(event.target==popupElms[(that.qaListId-1)]) {
+          popupElms[(that.qaListId-1)].classList.add('disp--none');
+          that.isPopupOpen = false;
+        }
+      }
+    });  
+
   };
 
   QaDataManagement.prototype.switchTabs = function() {
@@ -131,6 +172,13 @@
       });  
     }
 
+    this.editLiElms = document.querySelectorAll('.js-editLi');
+    this.deleteLiElms = document.querySelectorAll('.js-deleteLi');
+    let listRightMenuUlElms = document.querySelectorAll('.js-listRightMenuUl');
+    let isRightMenuOpen = false;
+    let clientX = 0;
+    let clientY = 0;
+
     for(let cnt=0,len=this.listDataElms.length;cnt<len;++cnt) {
       this.listDataElms[cnt].addEventListener('click', function() {
         that.qaListId = Math.trunc(this.parentNode.dataset.index);
@@ -138,20 +186,32 @@
       });
       this.listDataRightMenuElms[cnt].addEventListener('click', function() {
         this.nextSibling.classList.remove('disp--none');
+        that.qaListId = Math.trunc(this.parentNode.parentNode.dataset.index);
+        clientX = event.clientX;
+        clientY = event.clientY;
+        isRightMenuOpen = true;
       });
-
-      this.editLiElms = document.querySelectorAll('.js-editLi');
-      this.deleteLiElms = document.querySelectorAll('.js-deleteLi');
       this.editLiElms[cnt].addEventListener('click', function() {
         that.qaListId = Math.trunc(this.parentNode.parentNode.parentNode.dataset.index);
         that.editQaData();
         this.parentNode.classList.add('disp--none');
       }); 
       this.deleteLiElms[cnt].addEventListener('click', function() {
-        console.log('delete');
+        that.qaListId = Math.trunc(this.parentNode.parentNode.parentNode.dataset.index);
         this.parentNode.classList.add('disp--none');
+        that.displayPopupWindow();
       }); 
     }
+
+    window.addEventListener('click', function() {
+      let clientX2 = event.clientX;
+      let clientY2 = event.clientY;
+      if(clientX!=clientX2 && clientY!=clientY2 && isRightMenuOpen) {
+        listRightMenuUlElms[(that.qaListId-1)].classList.add('disp--none');
+        isRightMenuOpen = false;
+      }
+    });
+
     this.resisterQaBtnCancelElm.addEventListener('click', function() {
       that.contentsDivElms[0].classList.add('disp--none');
       that.contentsDivElms[1].classList.remove('disp--none');
