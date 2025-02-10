@@ -55,7 +55,7 @@ Could you please let me know if there are any errors in my English or code?</p>
 
 | カテゴリ名の設定 |  |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/3bf9c90f-01d1-4350-bddf-fb05bf712711" width="200"> |  |  |
+| <img src="https://github.com/user-attachments/assets/1bc44755-60a2-4a08-8563-48a340881dfb" width="200"> |  |  |
 
 | リストの新規登録 | リストの新規登録 |  |
 | ---- | ---- | ---- |
@@ -63,11 +63,11 @@ Could you please let me know if there are any errors in my English or code?</p>
 
 | リストの編集・削除 |  |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/ec8aa312-7a48-45d1-ab62-75acbd5dd013" width="200"> |  |  |
+| <img src="https://github.com/user-attachments/assets/5bf4346c-1f5f-4d06-984c-75855fb3b682" width="200"> |  |  |
 
 | 音声の設定 |  |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/77037d17-d5a8-44c5-b5ca-09f8c3a03433" width="200"> |  |  |
+| <img src="https://github.com/user-attachments/assets/6b599865-f9d9-40f1-910c-6c6910f2c378" width="200"> |  |  |
 
 ## references
 <ul>

@@ -17,6 +17,12 @@ $colorAttention: #f66;
   margin: $margin;
   font-size: rem($fontSize);
 }
+@mixin inputText {
+  border: 1px solid $colorKeyDark;
+  background: $colorKeyLight;
+  text-align: left;
+  padding: 10px;
+}
 
 body {
   font-size: rem(16px);
@@ -28,7 +34,7 @@ body {
 }
 .header {
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
   background: $colorKeyLight;
   padding: 10px;
   &__appTitle {
@@ -94,9 +100,10 @@ body {
       counter-reset: number 0;
       li {
         position: relative;
-        padding: 10px 10px 10px 40px;
+        padding: 20px 10px 10px 40px;
         text-align: left;
-        &:before{
+        display: flex;
+        &:before {
           position: absolute;
           counter-increment: number 1;
           content: counter(number);
@@ -111,10 +118,18 @@ body {
           text-align: center;
           vertical-align: center;
         }
+        > div {
+          width: calc(100% - 40px);
+        }
       }
     }
-    &__onOff {
-
+    &__listTitle {
+      padding: 30px 0 0;
+      text-align: left;
+      input[type='text'] {
+        @include inputText;
+        width: 100%;
+      }
     }
     &__textarea {
       text-align: left;
@@ -169,13 +184,6 @@ body {
           @include btn(16px, 10px 20px, 20px);
         }
       }
-    }
-    input[type="text"] {
-      border: 1px solid $colorKeyDark;
-      background: $colorKeyLight;
-      width: 100%;
-      text-align: left;
-      padding: 10px;
     }
     &__list {
       margin: 30px 0 0;
@@ -243,6 +251,20 @@ body {
         }
       }
     }
+    &__categoryName {
+      padding: 30px 0 0;
+      text-align: left;
+      > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        input[type='text'] {
+          @include inputText;
+          width: calc(100% - 40px);
+        }  
+      }
+    }
   }
 }
 
@@ -253,4 +275,7 @@ body {
 .required {
   color: $colorAttention;
   font-size: rem(12px);
+}
+.backToList {
+  cursor: pointer;
 }

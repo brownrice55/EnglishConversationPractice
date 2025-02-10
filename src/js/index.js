@@ -4,7 +4,6 @@
 
   let qaDataGlobal = new Map();
   let qaData = localStorage.getItem('qaData');
-
   if(qaData!=='undefined') {
     const qaDataJson = JSON.parse(qaData);
     qaDataGlobal = new Map(qaDataJson);
@@ -12,6 +11,12 @@
 
   const tabUlElmsGlobal = document.querySelectorAll('.js-tabUl');
   // this.tabPracticeElm = tabElmsGlobal[0];
+
+
+  // ** settings
+  const categoryNameDefault = [{ num:1, name:'挨拶' }, { num:2, name:'趣味' }, { num:3, name:'仕事' }];
+  let categoryNameDataGlobal = JSON.parse(localStorage.getItem('categoryNameData')) || categoryNameDefault;
+
 
   const QaDataManagement = function() {
     this.initialize.apply(this, arguments);
@@ -28,6 +33,7 @@
     this.resisterQaBtnCancelElm = registerQaBtnElms[1];
     this.resisterQaBtnRegisterElm = registerQaBtnElms[2];
     this.textareaValue = '';
+    this.categoryNameData = categoryNameDataGlobal;
 
     this.tabLiQaElms = tabUlElmsGlobal[1].querySelectorAll('li');
     this.contentsDivElms = document.querySelectorAll('.js-registerQAcontentsDiv');
@@ -38,7 +44,7 @@
       this.tabIndexNo = 0;
     }
     else {
-      this.tabIndexNo = Math.trunc(localStorage.getItem('tabQa')) || 0;
+      this.tabIndexNo = parseInt(localStorage.getItem('tabQa')) || 0;
     }
 
     this.qalistDataUl = document.querySelector('.js-qalistDataUl');
@@ -55,7 +61,7 @@
         answerArray.push(this.registerQaTextAreaElms[cnt].value);
       }
     }
-    let id = (this.tabIndexNo) ? Math.trunc(this.qaListId) : this.qaData.size+1;
+    let id = (this.tabIndexNo) ? parseInt(this.qaListId) : this.qaData.size+1;
     this.qaData.set(id, { question:this.registerQaTextAreaElms[0].value, answer:answerArray, category:this.registerQaCategorySelectElm.value});
     localStorage.setItem('qaData', JSON.stringify([...this.qaData]));
     localStorage.setItem('tabQa', this.tabIndexNo);
@@ -149,7 +155,6 @@
       this.resisterQaBtnRegisterElm.innerHTML = '登録する';
       this.resisterQaBtnCancelElm.classList.add('disp--none');
       this.registerQaTextAreaElms[0].value = '';
-      this.registerQaCategorySelectElm.value = 'hobby';
     }
     this.registerQaAnswerDivElm.innerHTML = '<h3>回答例（英語）<span class="required">※</span></h3><textarea name="" id=""></textarea>';
   };
@@ -166,7 +171,7 @@
     });
     for(let cnt=0,len=2;cnt<len;++cnt) {
       this.tabLiQaElms[cnt].addEventListener('click', function() {
-        that.tabIndexNo = Math.trunc(this.dataset.index);
+        that.tabIndexNo = parseInt(this.dataset.index);
         that.switchTabs();
         that.reset();
       });  
@@ -181,23 +186,23 @@
 
     for(let cnt=0,len=this.listDataElms.length;cnt<len;++cnt) {
       this.listDataElms[cnt].addEventListener('click', function() {
-        that.qaListId = Math.trunc(this.parentNode.dataset.index);
+        that.qaListId = parseInt(this.parentNode.dataset.index);
         that.editQaData();
       });
       this.listDataRightMenuElms[cnt].addEventListener('click', function() {
         this.nextSibling.classList.remove('disp--none');
-        that.qaListId = Math.trunc(this.parentNode.parentNode.dataset.index);
+        that.qaListId = parseInt(this.parentNode.parentNode.dataset.index);
         clientX = event.clientX;
         clientY = event.clientY;
         isRightMenuOpen = true;
       });
       this.editLiElms[cnt].addEventListener('click', function() {
-        that.qaListId = Math.trunc(this.parentNode.parentNode.parentNode.dataset.index);
+        that.qaListId = parseInt(this.parentNode.parentNode.parentNode.dataset.index);
         that.editQaData();
         this.parentNode.classList.add('disp--none');
       }); 
       this.deleteLiElms[cnt].addEventListener('click', function() {
-        that.qaListId = Math.trunc(this.parentNode.parentNode.parentNode.dataset.index);
+        that.qaListId = parseInt(this.parentNode.parentNode.parentNode.dataset.index);
         this.parentNode.classList.add('disp--none');
         that.displayPopupWindow();
       }); 
@@ -228,9 +233,131 @@
       this.contentsDivElms[this.tabIndexArray[this.tabIndexNo][0]].classList.add('disp--none');
       this.contentsDivElms[this.tabIndexArray[this.tabIndexNo][1]].classList.remove('disp--none');
     }
+
+    for(let cnt=0,len=this.categoryNameData.length;cnt<len;++cnt) {
+      let optionElm = document.createElement('option');
+      optionElm.value = this.categoryNameData[cnt].name;
+      optionElm.textContent = this.categoryNameData[cnt].name;
+      optionElm.dataset.num = this.categoryNameData[cnt].num;
+      this.registerQaCategorySelectElm.appendChild(optionElm);
+    }
+    this.registerQaCategorySelectElm.value = this.categoryNameData[0].name;
   };
 
+  const Settings = function() {
+    this.initialize.apply(this, arguments);
+  };
+
+  Settings.prototype.initialize = function() {
+    this.settingsElm = document.querySelector('.js-settings');
+    this.settingsH2Title = this.settingsElm.querySelector('h2');
+    this.settingsContentsDivElms = this.settingsElm.querySelectorAll(':scope > div');
+    this.settingsContentsLiElms = document.querySelectorAll('.js-settingsList li');
+    this.categoryListIndexNo = 0;
+
+    this.categoryNameSettingBtnElms = document.querySelectorAll('.js-categoryNameSettingBtn button');
+    this.categoryNameAddBtnElm = this.categoryNameSettingBtnElms[0];
+    this.categoryNameRegisterBtnElm = this.categoryNameSettingBtnElms[1];
+
+    this.categoryNameData = categoryNameDataGlobal;
+    this.categoryNameSettingAreaElm = document.querySelector('.js-categoryNameSettingArea');
+  };
+
+  Settings.prototype.switchAndDisplayPages = function() {
+    let h2Text = '';
+    for(let cnt=0,len=this.settingsContentsLiElms.length;cnt<len;++cnt) {
+      if(cnt==this.categoryListIndexNo) {
+        this.settingsContentsDivElms[(cnt+1)].classList.remove('disp--none');
+        h2Text = this.settingsContentsLiElms[cnt].textContent;
+        this.settingsH2Title.innerHTML = '<span class="js-backToList backToList">←</span>' + h2Text; // **<span>←</span>の部分は後で変更
+      }
+      else {
+        this.settingsContentsDivElms[(cnt+1)].classList.add('disp--none');
+      }
+    }
+    const that = this;
+    this.settingsContentsLiElms[0].parentNode.classList.add('disp--none');
+    let backToListElm = document.querySelector('.js-backToList');
+    backToListElm.addEventListener('click', function() {
+      that.settingsContentsLiElms[0].parentNode.classList.remove('disp--none');
+      that.settingsContentsDivElms[0].classList.remove('disp--none');
+      that.settingsContentsDivElms[(that.categoryListIndexNo+1)].classList.add('disp--none');
+      that.settingsH2Title.textContent = '設定';
+    });
+  };
+
+  Settings.prototype.displayCategoryNameList = function() {
+    let categoryNameSettingHTML = '<h3>カテゴリ名を追加</h3>';
+    for(let cnt=0,len=this.categoryNameData.length;cnt<len;++cnt) {
+      categoryNameSettingHTML += '<div><input type="text" name="" id="" value="' + this.categoryNameData[cnt].name + '" dataset-num="' + this.categoryNameData[cnt].num + '"><button>削除</button></div>';
+    }
+    this.categoryNameSettingAreaElm.innerHTML = categoryNameSettingHTML;
+
+    let deleteButtonElms = this.categoryNameSettingAreaElm.querySelectorAll('button');
+    for(let cnt=0,len=deleteButtonElms.length;cnt<len;++cnt) {
+      deleteButtonElms[cnt].addEventListener('click', function() {
+        this.parentNode.remove();
+      });
+    }
+  };
+
+  Settings.prototype.addCategoryNameInputText = function() {
+    const div = document.createElement('div');
+    div.innerHTML = '<input type="text" name="" id="" value="">';
+    this.categoryNameSettingAreaElm.appendChild(div);
+  };
+
+  Settings.prototype.saveCategoryName = function() {
+    let categoryNameSettingAreaInputElms = this.categoryNameSettingAreaElm.querySelectorAll('input');
+    let isInputValueFilled = 0;
+    for(let cnt=0,len=categoryNameSettingAreaInputElms.length;cnt<len;++cnt) {
+      if(categoryNameSettingAreaInputElms[cnt].value) {
+        ++isInputValueFilled;
+      }
+    }
+    if(!isInputValueFilled) { return; }
+
+    let inputArray = [];
+    let categoryNum = 0;
+    for(let cnt=0,len=categoryNameSettingAreaInputElms.length;cnt<len;++cnt) {
+      if(categoryNameSettingAreaInputElms[cnt].value) {
+        categoryNum = parseInt(categoryNameSettingAreaInputElms[cnt].dataset.num) || categoryNum+1;
+        inputArray.push({name: categoryNameSettingAreaInputElms[cnt].value, num: categoryNum});
+      }
+    }
+
+    this.categoryNameData = inputArray;
+    localStorage.setItem('categoryNameData', JSON.stringify([...this.categoryNameData]));
+    window.location.reload(false); // **後で見直し
+  };
+
+  Settings.prototype.setEvent = function() {
+    const that = this;
+    this.categoryNameAddBtnElm.addEventListener('click', function() {
+      that.addCategoryNameInputText();
+    });
+    this.categoryNameRegisterBtnElm.addEventListener('click', function() {
+      that.saveCategoryName();
+    });
+
+    for(let cnt=0,len=this.settingsContentsLiElms.length;cnt<len;++cnt) {
+      this.settingsContentsLiElms[cnt].addEventListener('click', function() {
+        that.categoryListIndexNo = parseInt(this.dataset.index);
+        that.switchAndDisplayPages();
+      });
+    }
+  };
+
+  Settings.prototype.run = function() {
+    this.displayCategoryNameList();
+    this.setEvent();
+  };
+
+
   window.addEventListener('DOMContentLoaded', function() {
+    let settings = new Settings();
+    settings.run();
+
     let qaDataManagement = new QaDataManagement();
     qaDataManagement.run();
   });

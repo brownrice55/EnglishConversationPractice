@@ -87,10 +87,7 @@
         </div> 
         <div class="main__contents__select">
           <h3>カテゴリ</h3>
-          <select name="" id="" class="js-registerQAcategorySelect">
-            <option value="hobby">趣味に関する会話</option>
-            <option value="job">仕事に関する会話</option>
-          </select>
+          <select name="" id="" class="js-registerQAcategorySelect"></select>
         </div>
         <div class="main__contents__btn--center">
           <button class="disp--none">キャンセル</button>
@@ -107,72 +104,65 @@
       <nav class="main__nav">
         <h2 class="main__title">設定</h2>
       </nav>
-      <div class="main__contents disp--none">
-        <ul class="main__list">
-          <li>音声設定</li>
-          <li>カテゴリ名の設定</li>
-          <li>リストの新規登録</li>
-          <li>リストの編集・削除</li>
+      <div class="main__contents">
+        <ul class="main__contents__list js-settingsList">
+          <li data-index="0">音声設定</li>
+          <li data-index="1">カテゴリ名の設定</li>
+          <li data-index="2">リストの新規登録</li>
+          <li data-index="3">リストの編集・削除</li>
         </ul>
       </div>
       <div class="main__contents disp--none">
-        <div>
+        <div class="main__contents__select">
           <h3>自動音声設定</h3>
           <select name="" id="">
             <option value="">英語（イギリス）</option>
           </select>
         </div>
-        <div class="main__contents__onOff">
-          <input type="checkbox" name="" id="">
+        <div class="main__contents__btn--center">
+          <button>設定する</button>
         </div>
-        <button>設定する</button>
       </div>
       <div class="main__contents disp--none">
-        <h2>カテゴリ名を登録</h2>
-        <input type="text" name="" id="">
-        <button>カテゴリを追加する</button>
-        <button>登録する</button>
+        <div class="main__contents__categoryName js-categoryNameSettingArea"></div>
+        <div class="main__contents__btn--center js-categoryNameSettingBtn">
+          <button>カテゴリを追加する</button>
+          <button>保存する</button>
+        </div>
       </div>
       <div class="main__contents disp--none">
-        <h2>リスト名</h2>
-        <input type="text" name="" id="">
+        <div class="main__contents__listTitle">
+          <h3>リスト名</h3>
+          <input type="text" name="" id="">  
+        </div>
         <ol class="main__contents__orderedList">
-          <li>Hi!<span>削除</span></li>
-          <li>英文の質問が入ります。<span>削除</span></li>
-          <li>英文の質問が入ります。<span>削除</span></li>
-          <li>英文の質問が入ります。<span>削除</span></li>
-          <li>英文の質問が入ります。<span>削除</span></li>
+          <li>
+            <div>Hi!</div>
+            <button>削除</button>
+          </li>
+          <li>
+            <div>英文の質問が入ります。</div>
+            <button>削除</button>
+          </li>
+          <li>
+            <div>英文の質問が入ります。</div>
+            <button>削除</button>
+          </li>
+          <li>
+            <div>英文の質問が入ります。</div>
+            <button>削除</button>
+          </li>
+          <li>
+            <div>英文の質問が入ります。</div>
+            <button>削除</button>
+          </li>
         </ol>
-        <button>質問を追加する</button>
+        <div class="main__contents__btn--center">
+          <button>質問を追加する</button>
+        </div>
       </div>
       <div class="main__contents disp--none">
-        <ul>
-          <li>
-            リスト名が入ります。
-            <button>編集</button>
-            <button>削除</button>
-          </li>
-          <li>
-            リスト名が入ります。
-            <button>編集</button>
-            <button>削除</button>
-          </li>
-          <li>
-            リスト名が入ります。
-            <button>編集</button>
-            <button>削除</button>
-          </li>
-          <li>
-            リスト名が入ります。
-            <button>編集</button>
-            <button>削除</button>
-          </li>
-          <li>
-            リスト名が入ります。
-            <button>編集</button>
-            <button>削除</button>
-          </li>
-        </ul>
+        <ul class="main__contents__list"></ul>
       </div>
     </section>
   </main>
