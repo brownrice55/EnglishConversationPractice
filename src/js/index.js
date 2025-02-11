@@ -18,6 +18,44 @@
   let categoryNameDataGlobal = JSON.parse(localStorage.getItem('categoryNameData')) || categoryNameDefault;
 
 
+  const GlobalMenu = function() {
+    this.initialize.apply(this, arguments);
+  };
+
+  GlobalMenu.prototype.initialize = function() {
+    this.headerNavMenuBtnElm = document.querySelector('.js-headerNavMenuBtn');
+    this.headerNavMenuCloseBtnElm = document.querySelector('.js-headerNavMenuCloseBtn');
+    this.headerNavMenuLiElms = document.querySelectorAll('.js-headerNavMenu li');
+    this.sectionElms = document.querySelectorAll('section');
+  };
+
+  GlobalMenu.prototype.setEvent = function() {
+    const that = this;
+    this.headerNavMenuBtnElm.addEventListener('click', function() {
+      this.classList.add('disp--none');
+      that.headerNavMenuCloseBtnElm.parentNode.classList.remove('disp--none');
+    });
+    this.headerNavMenuCloseBtnElm.addEventListener('click', function() {
+      this.parentNode.classList.add('disp--none');
+      that.headerNavMenuBtnElm.classList.remove('disp--none');
+    });
+    const sectionIndexArray = [[1,2],[0,2],[0,1]];
+    for(let cnt=0,len=this.headerNavMenuLiElms.length;cnt<len;++cnt) {
+      this.headerNavMenuLiElms[cnt].addEventListener('click', function() {
+        that.headerNavMenuBtnElm.classList.remove('disp--none');
+        that.headerNavMenuCloseBtnElm.parentNode.classList.add('disp--none');
+        that.sectionElms[cnt].classList.remove('disp--none');
+        for(let cnt2=0;cnt2<2;++cnt2) {
+          that.sectionElms[sectionIndexArray[cnt][cnt2]].classList.add('disp--none');
+        }
+      });
+    }
+  };
+
+  GlobalMenu.prototype.run = function() {
+    this.setEvent();
+  };
+
   const QaDataManagement = function() {
     this.initialize.apply(this, arguments);
   };
@@ -355,6 +393,9 @@
 
 
   window.addEventListener('DOMContentLoaded', function() {
+    let globalMenu = new GlobalMenu();
+    globalMenu.run();
+
     let settings = new Settings();
     settings.run();
 

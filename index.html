@@ -10,13 +10,15 @@
   <header class="header">
     <h1 class="header__appTitle">英会話練習アプリ</h1>
     <nav class="header__nav">
-      <span>■</span>
-      <ul>
-        <li>練習</li>
-        <li>新規登録</li>
-        <li>編集・削除</li>
-        <li>設定</li>
-      </ul>
+      <button class="js-headerNavMenuBtn">■</button>
+      <div class="header__nav__menu disp--none">
+        <button class="js-headerNavMenuCloseBtn">X</button>
+        <ul class="js-headerNavMenu">
+          <li>練習</li>
+          <li>新規登録・編集・削除</li>
+          <li>設定</li>
+        </ul>
+      </div>
     </nav>
   </header>
   <main class="main">
