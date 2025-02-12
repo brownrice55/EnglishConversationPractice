@@ -108,10 +108,11 @@ body {
     }
   }
   &__description {
-    background: $colorKeyDark;
-    color: $colorKeyLight;
     padding: 10px;
     font-size: rem(14px);
+    div {
+      padding: 20px;
+    }
     select {
       float: right;
     }
@@ -124,6 +125,16 @@ body {
     text-align: center;
     margin: 0 auto;
     padding: 0 5%;
+    &__qa {
+      text-align: left;
+      dl {
+        margin: 10px 0 30px;
+        line-height: 30px;
+      }
+    }
+    &__clip {
+      text-align: right;
+    }
     &__orderedList {
       padding: 10px;
       counter-reset: number 0;

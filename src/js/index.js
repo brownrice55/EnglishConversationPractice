@@ -392,6 +392,66 @@
   };
 
 
+  const Practice = function() {
+    this.initialize.apply(this, arguments);
+  };
+
+  Practice.prototype.initialize = function() {
+    this.qaData = qaDataGlobal;
+    this.practiceQuestionElm = document.querySelector('.js-practiceQuestion');
+    this.practiceAnswersElm = document.querySelector('.js-practiceAnswers');
+    this.practiceDisplayAnswerBtnElm = document.querySelector('.js-practiceDisplayAnswerBtn');
+    this.practiceDisplayNextQuestionBtnElm = document.querySelector('.js-practiceDisplayNextQuestionBtn');
+
+    this.randomIndexArray = this.getRandomIndexArray(this.qaData.size);
+    this.randomCnt = 0;
+  };
+
+  Practice.prototype.displayNewQuestion = function() {
+    this.selectedData = this.qaData.get(this.randomIndexArray[this.randomCnt]+1);
+    this.practiceQuestionElm.innerHTML = this.selectedData.question;
+    this.practiceAnswersElm.innerHTML = '';
+    for(let cnt=0,len=this.selectedData.answer.length;cnt<len;++cnt) {
+      const dl = document.createElement('dl');
+      dl.innerHTML = '<dt>回答例' + (cnt+1) + '<i>音声アイコン</i></dt><dd>' + this.selectedData.answer[cnt] + '</dd>';
+      this.practiceAnswersElm.appendChild(dl);
+    }
+  };
+
+  Practice.prototype.getRandomIndexArray = function(aLength) {
+    let len = aLength;
+    let array = [];
+    for(let cnt=0;cnt<len;++cnt) {
+      array[cnt] = cnt;
+    }
+    for(let cnt=len-1;cnt>0;--cnt) {
+      const random = Math.floor(Math.random()*(cnt+1));
+      [array[cnt],array[random]] = [array[random],array[cnt]];
+    }
+    return array;
+  };
+
+  Practice.prototype.setEvent = function() {
+    const that = this;
+    this.practiceDisplayAnswerBtnElm.addEventListener('click', function() {
+      that.practiceAnswersElm.classList.remove('disp--none');
+      that.practiceDisplayNextQuestionBtnElm.parentNode.classList.remove('disp--none');
+      this.parentNode.classList.add('disp--none');
+    });
+    this.practiceDisplayNextQuestionBtnElm.addEventListener('click', function() {
+      that.practiceAnswersElm.classList.add('disp--none');
+      this.parentNode.classList.add('disp--none');
+      that.practiceDisplayAnswerBtnElm.parentNode.classList.remove('disp--none');
+      ++that.randomCnt;
+      that.displayNewQuestion();
+    });
+  };
+
+  Practice.prototype.run = function() {
+    this.displayNewQuestion();
+    this.setEvent();
+  };
+
   window.addEventListener('DOMContentLoaded', function() {
     let globalMenu = new GlobalMenu();
     globalMenu.run();
@@ -401,6 +461,9 @@
 
     let qaDataManagement = new QaDataManagement();
     qaDataManagement.run();
+
+    let practice = new Practice();
+    practice.run();
   });
 
 }());

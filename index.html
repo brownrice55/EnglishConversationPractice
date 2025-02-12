@@ -26,9 +26,15 @@
       <nav class="main__nav">
         <h2 class="main__title">練習</h2>
         <ul class="js-tabUl">
-          <li class="main__nav--active">ランダム</li>
-          <li>もう一度</li>
-          <li>リスト</li>
+          <li class="active">
+            <h2 class="main__title">ランダム</h2>
+          </li>
+          <li>
+            <h2 class="main__title">もう一度</h2>
+          </li>
+          <li>
+            <h2 class="main__title">リスト</h2>
+          </li>
         </ul>
       </nav>
       <div class="main__description">
@@ -38,23 +44,33 @@
             <select name="" id=""></select>
         </div>
       </div>
-      <div class="main__contents disp--none">
-        <p>Q. 質問（英文）</p>
-        <i></i>
-        <button>回答例を見る</button>
-        <div class="disp--none">
-          回答例（英文）
-        </div>
-      </div>
-      <div class="main__contents disp--none">
-        <p>Q. 質問（英文）</p>
-        <i></i>
-        <button>回答例を見る</button>
-        <div class="disp--none">
-          回答例（英文）
-        </div>
-      </div>
       <div class="main__contents">
+        <div class="main__contents__clip">
+          <i>クリップアイコン</i>
+        </div>
+        <div class="main__contents__qa">
+          <dl>
+            <dt>質問<i>音声アイコン</i></dt>
+            <dd class="js-practiceQuestion"></dd>
+          </dl>           
+        </div>
+        <div class="main__contents__btn--center">
+          <button class="js-practiceDisplayAnswerBtn">回答例を見る</button>
+        </div>
+        <div class="main__contents__qa disp--none js-practiceAnswers"></div>
+        <div class="main__contents__btn--center disp--none">
+          <button class="js-practiceDisplayNextQuestionBtn">次の問題へ</button>
+        </div>
+      </div>
+      <div class="main__contents disp--none">
+        <p>Q. 質問（英文）</p>
+        <i></i>
+        <button>回答例を見る</button>
+        <div class="disp--none">
+          回答例（英文）
+        </div>
+      </div>
+      <div class="main__contents disp--none">
         <span>リスト</span>
         <select name="" id="">
           <option value="">リスト名が入ります</option>
