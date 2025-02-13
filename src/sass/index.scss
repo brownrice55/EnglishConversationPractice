@@ -131,6 +131,9 @@ body {
         margin: 10px 0 30px;
         line-height: 30px;
       }
+      i {
+        cursor: pointer;
+      }
     }
     &__clip {
       text-align: right;

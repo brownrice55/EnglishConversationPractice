@@ -17,6 +17,7 @@
   const categoryNameDefault = [{ num:1, name:'挨拶' }, { num:2, name:'趣味' }, { num:3, name:'仕事' }];
   let categoryNameDataGlobal = JSON.parse(localStorage.getItem('categoryNameData')) || categoryNameDefault;
 
+  let voiceLangDataGlobal = JSON.parse(localStorage.getItem('voiceLangData')) || ['en-GB', 'en-GB'];
 
   const GlobalMenu = function() {
     this.initialize.apply(this, arguments);
@@ -32,6 +33,10 @@
   GlobalMenu.prototype.setEvent = function() {
     const that = this;
     this.headerNavMenuBtnElm.addEventListener('click', function() {
+      if(speechSynthesis.speaking) {
+        speechSynthesis.cancel();
+        // ** 再生中→停止アイコンへ　後で追加
+      }
       this.classList.add('disp--none');
       that.headerNavMenuCloseBtnElm.parentNode.classList.remove('disp--none');
     });
@@ -299,6 +304,10 @@
 
     this.categoryNameData = categoryNameDataGlobal;
     this.categoryNameSettingAreaElm = document.querySelector('.js-categoryNameSettingArea');
+
+    this.voiceLangData = voiceLangDataGlobal;
+    this.settingsVoiceElms = document.querySelectorAll('.js-settingsVoice');
+    this.settingsVoiceBtnElm = document.querySelector('.js-settingsVoiceBtn');
   };
 
   Settings.prototype.switchAndDisplayPages = function() {
@@ -384,9 +393,17 @@
         that.switchAndDisplayPages();
       });
     }
+
+    this.settingsVoiceBtnElm.addEventListener('click', function() {
+      localStorage.setItem('voiceLangData', JSON.stringify([that.settingsVoiceElms[0].value, that.settingsVoiceElms[1].value]));
+      window.location.reload(false); // **後で見直し
+    });
   };
 
   Settings.prototype.run = function() {
+    for(let cnt=0;cnt<2;++cnt) {
+      this.settingsVoiceElms[cnt].value = this.voiceLangData[cnt];
+    }
     this.displayCategoryNameList();
     this.setEvent();
   };
@@ -405,16 +422,44 @@
 
     this.randomIndexArray = this.getRandomIndexArray(this.qaData.size);
     this.randomCnt = 0;
+
+    this.voiceLangData = voiceLangDataGlobal;
+    this.voice = new SpeechSynthesisUtterance();
+    this.questionAudioElm = document.querySelector('.js-questionAudio');
+  };
+
+  Practice.prototype.playAudio = function(aText, aIndex) {
+    this.voice = new SpeechSynthesisUtterance(aText);
+    this.voice.lang = this.voiceLangData[aIndex];
+    speechSynthesis.speak(this.voice);
   };
 
   Practice.prototype.displayNewQuestion = function() {
+    const that = this;
     this.selectedData = this.qaData.get(this.randomIndexArray[this.randomCnt]+1);
     this.practiceQuestionElm.innerHTML = this.selectedData.question;
     this.practiceAnswersElm.innerHTML = '';
-    for(let cnt=0,len=this.selectedData.answer.length;cnt<len;++cnt) {
+    const seletedAnswerArrayLength = this.selectedData.answer.length;
+    for(let cnt=0;cnt<seletedAnswerArrayLength;++cnt) {
       const dl = document.createElement('dl');
-      dl.innerHTML = '<dt>回答例' + (cnt+1) + '<i>音声アイコン</i></dt><dd>' + this.selectedData.answer[cnt] + '</dd>';
+      dl.innerHTML = '<dt>回答例' + (cnt+1) + '<i class="stop">停止アイコン</i></dt><dd>' + this.selectedData.answer[cnt] + '</dd>';
       this.practiceAnswersElm.appendChild(dl);
+    }
+    this.answerAudioIconElms = this.practiceAnswersElm.querySelectorAll('i');
+    this.answerAudioDdElms = this.practiceAnswersElm.querySelectorAll('dd');
+    for(let cnt=0;cnt<seletedAnswerArrayLength;++cnt) {
+      this.answerAudioIconElms[cnt].addEventListener('click', function() {
+        if(this.className=='play') {
+          speechSynthesis.cancel();
+          this.className = 'stop';
+          this.textContent = '停止アイコン';  
+        }
+        else {
+          that.playAudio(that.answerAudioDdElms[cnt].textContent, 1);
+          this.className = 'play';
+          this.textContent = '再生中アイコン';
+        }
+      });
     }
   };
 
@@ -439,11 +484,26 @@
       this.parentNode.classList.add('disp--none');
     });
     this.practiceDisplayNextQuestionBtnElm.addEventListener('click', function() {
+      speechSynthesis.cancel();
       that.practiceAnswersElm.classList.add('disp--none');
       this.parentNode.classList.add('disp--none');
       that.practiceDisplayAnswerBtnElm.parentNode.classList.remove('disp--none');
       ++that.randomCnt;
       that.displayNewQuestion();
+    });
+    this.questionAudioElm.addEventListener('click', function() {
+      if(this.classList.contains('play')) {
+        speechSynthesis.cancel();
+        this.classList.add('stop');
+        this.classList.remove('play');
+        this.textContent = '停止アイコン';
+      }
+      else {
+        that.playAudio(that.selectedData.question, 0);
+        this.classList.add('play');
+        this.classList.remove('stop');
+        this.textContent = '再生中アイコン';
+      }
     });
   };
 

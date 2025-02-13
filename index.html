@@ -50,7 +50,7 @@
         </div>
         <div class="main__contents__qa">
           <dl>
-            <dt>質問<i>音声アイコン</i></dt>
+            <dt>質問<i class="js-questionAudio stop">停止アイコン</i></dt>
             <dd class="js-practiceQuestion"></dd>
           </dl>           
         </div>
@@ -132,13 +132,27 @@
       </div>
       <div class="main__contents disp--none">
         <div class="main__contents__select">
-          <h3>自動音声設定</h3>
-          <select name="" id="">
-            <option value="">英語（イギリス）</option>
+          <h3>質問の音声</h3>
+          <select name="" id="" class="js-settingsVoice">
+            <option value="en-GB">英語（イギリス）</option>
+            <option value="en-US">英語（アメリカ）</option>
+            <option value="en-AU">英語（オーストラリア）</option>
+            <option value="en-CA">英語（カナダ）</option>
+            <option value="en-IN">英語（インド）</option>
+          </select>
+        </div>
+        <div class="main__contents__select">
+          <h3>回答例の音声</h3>
+          <select name="" id="" class="js-settingsVoice">
+            <option value="en-GB">英語（イギリス）</option>
+            <option value="en-US">英語（アメリカ）</option>
+            <option value="en-AU">英語（オーストラリア）</option>
+            <option value="en-CA">英語（カナダ）</option>
+            <option value="en-IN">英語（インド）</option>
           </select>
         </div>
         <div class="main__contents__btn--center">
-          <button>設定する</button>
+          <button class="js-settingsVoiceBtn">設定する</button>
         </div>
       </div>
       <div class="main__contents disp--none">
