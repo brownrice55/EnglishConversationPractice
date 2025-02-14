@@ -35,7 +35,15 @@
     this.headerNavMenuBtnElm.addEventListener('click', function() {
       if(speechSynthesis.speaking) {
         speechSynthesis.cancel();
-        // ** 再生中→停止アイコンへ　後で追加
+        let iconPlayElm = document.querySelector('.js-practice .play');
+        iconPlayElm.classList.add('stop');
+        iconPlayElm.classList.remove('play');
+        iconPlayElm.textContent = '停止アイコン';
+
+        let iconAllElms = document.querySelectorAll('.js-practice .stop');
+        for(let cnt=0,len=iconAllElms.length;cnt<len;++cnt) {
+          iconAllElms[cnt].disabled = false;
+        }
       }
       this.classList.add('disp--none');
       that.headerNavMenuCloseBtnElm.parentNode.classList.remove('disp--none');
@@ -182,8 +190,7 @@
           that.isPopupOpen = false;
         }
       }
-    });  
-
+    });
   };
 
   QaDataManagement.prototype.switchTabs = function() {
@@ -425,13 +432,44 @@
 
     this.voiceLangData = voiceLangDataGlobal;
     this.voice = new SpeechSynthesisUtterance();
-    this.questionAudioElm = document.querySelector('.js-questionAudio');
+    this.questionAudioIconElm = document.querySelector('.js-questionAudioIcon');
   };
 
-  Practice.prototype.playAudio = function(aText, aIndex) {
-    this.voice = new SpeechSynthesisUtterance(aText);
-    this.voice.lang = this.voiceLangData[aIndex];
-    speechSynthesis.speak(this.voice);
+  Practice.prototype.resetDisabled = function(aTargetIconElm) {
+    aTargetIconElm.classList.add('stop');
+    aTargetIconElm.classList.remove('play');
+    aTargetIconElm.textContent = '停止アイコン';
+    this.questionAudioIconElm.disabled = false;
+    for(let cnt=0,len=this.answerAudioIconElms.length;cnt<len;++cnt) {
+      this.answerAudioIconElms[cnt].disabled = false;
+    }
+  };
+
+  Practice.prototype.playAudio = function(aText, aIndex, aIconElm) {
+    const that = this;
+    
+    if(speechSynthesis.speaking) {
+      speechSynthesis.cancel();
+      this.resetDisabled(aIconElm);
+    }
+    else {
+      this.voice = new SpeechSynthesisUtterance(aText);
+      this.voice.lang = this.voiceLangData[aIndex];
+      speechSynthesis.speak(this.voice);
+      aIconElm.classList.add('play');
+      aIconElm.classList.remove('stop');
+      aIconElm.textContent = '再生中アイコン';
+  
+      this.questionAudioIconElm.disabled = true;
+      for(let cnt=0,len=this.answerAudioIconElms.length;cnt<len;++cnt) {
+        this.answerAudioIconElms[cnt].disabled = true;
+      }
+      aIconElm.disabled = false;
+
+      this.voice.addEventListener('end', function() {
+        that.resetDisabled(aIconElm);
+      });
+    }
   };
 
   Practice.prototype.displayNewQuestion = function() {
@@ -442,23 +480,14 @@
     const seletedAnswerArrayLength = this.selectedData.answer.length;
     for(let cnt=0;cnt<seletedAnswerArrayLength;++cnt) {
       const dl = document.createElement('dl');
-      dl.innerHTML = '<dt>回答例' + (cnt+1) + '<i class="stop">停止アイコン</i></dt><dd>' + this.selectedData.answer[cnt] + '</dd>';
+      dl.innerHTML = '<dt>回答例' + (cnt+1) + '<button class="js-audioIcon stop">停止アイコン</button></dt><dd>' + this.selectedData.answer[cnt] + '</dd>';
       this.practiceAnswersElm.appendChild(dl);
     }
-    this.answerAudioIconElms = this.practiceAnswersElm.querySelectorAll('i');
+    this.answerAudioIconElms = this.practiceAnswersElm.querySelectorAll('.js-audioIcon');
     this.answerAudioDdElms = this.practiceAnswersElm.querySelectorAll('dd');
     for(let cnt=0;cnt<seletedAnswerArrayLength;++cnt) {
       this.answerAudioIconElms[cnt].addEventListener('click', function() {
-        if(this.className=='play') {
-          speechSynthesis.cancel();
-          this.className = 'stop';
-          this.textContent = '停止アイコン';  
-        }
-        else {
-          that.playAudio(that.answerAudioDdElms[cnt].textContent, 1);
-          this.className = 'play';
-          this.textContent = '再生中アイコン';
-        }
+        that.playAudio(that.answerAudioDdElms[cnt].textContent, 1, this);
       });
     }
   };
@@ -490,20 +519,10 @@
       that.practiceDisplayAnswerBtnElm.parentNode.classList.remove('disp--none');
       ++that.randomCnt;
       that.displayNewQuestion();
+      that.resetDisabled(that.questionAudioIconElm);
     });
-    this.questionAudioElm.addEventListener('click', function() {
-      if(this.classList.contains('play')) {
-        speechSynthesis.cancel();
-        this.classList.add('stop');
-        this.classList.remove('play');
-        this.textContent = '停止アイコン';
-      }
-      else {
-        that.playAudio(that.selectedData.question, 0);
-        this.classList.add('play');
-        this.classList.remove('stop');
-        this.textContent = '再生中アイコン';
-      }
+    this.questionAudioIconElm.addEventListener('click', function() {
+      that.playAudio(that.selectedData.question, 0 ,this);
     });
   };
 
