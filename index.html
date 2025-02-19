@@ -27,26 +27,26 @@
         <h2 class="main__title">練習</h2>
         <ul class="js-tabUl">
           <li class="active">
-            <h2 class="main__title">ランダム</h2>
+            <h2 class="main__title" data-index="0">ランダム</h2>
           </li>
           <li>
-            <h2 class="main__title">もう一度</h2>
+            <h2 class="main__title" data-index="1">もう一度</h2>
           </li>
           <li>
-            <h2 class="main__title">リスト</h2>
+            <h2 class="main__title" data-index="2">リスト</h2>
           </li>
         </ul>
       </nav>
       <div class="main__description">
         <div>
-          <p>登録した質問をランダムで出題します。<br>
-            音声の後に質問に答えてください。</p>
+          <p class="js-practiceDescription">登録した質問をランダムで出題します。</p>
+          <p>音声の後に質問に答えてください。</p>
             <select name="" id=""></select>
         </div>
       </div>
-      <div class="main__contents">
+      <div class="js-practiceContents main__contents">
         <div class="main__contents__clip">
-          <i>クリップアイコン</i>
+          <button class="js-clipIcon">クリップアイコン</button>
         </div>
         <div class="main__contents__qa">
           <dl>
@@ -62,15 +62,15 @@
           <button class="js-practiceDisplayNextQuestionBtn">次の問題へ</button>
         </div>
       </div>
-      <div class="main__contents disp--none">
+      <!-- <div class="js-practiceContents main__contents disp--none">
         <p>Q. 質問（英文）</p>
         <i></i>
         <button>回答例を見る</button>
         <div class="disp--none">
           回答例（英文）
         </div>
-      </div>
-      <div class="main__contents disp--none">
+      </div> -->
+      <div class="js-practiceContents main__contents disp--none">
         <span>リスト</span>
         <select name="" id="">
           <option value="">リスト名が入ります</option>

@@ -10,8 +10,6 @@
   }
 
   const tabUlElmsGlobal = document.querySelectorAll('.js-tabUl');
-  // this.tabPracticeElm = tabElmsGlobal[0];
-
 
   // ** settings
   const categoryNameDefault = [{ num:1, name:'挨拶' }, { num:2, name:'趣味' }, { num:3, name:'仕事' }];
@@ -113,7 +111,7 @@
       }
     }
     let id = (this.tabIndexNo) ? parseInt(this.qaListId) : this.qaData.size+1;
-    this.qaData.set(id, { question:this.registerQaTextAreaElms[0].value, answer:answerArray, category:this.registerQaCategorySelectElm.value});
+    this.qaData.set(id, { question:this.registerQaTextAreaElms[0].value, answer:answerArray, category:this.registerQaCategorySelectElm.value, clip:false});
     localStorage.setItem('qaData', JSON.stringify([...this.qaData]));
     localStorage.setItem('tabQa', this.tabIndexNo);
     window.location.reload(false); // **後で見直し
@@ -427,6 +425,8 @@
     this.practiceDisplayAnswerBtnElm = document.querySelector('.js-practiceDisplayAnswerBtn');
     this.practiceDisplayNextQuestionBtnElm = document.querySelector('.js-practiceDisplayNextQuestionBtn');
 
+    this.tabPracticeH2Elms = tabUlElmsGlobal[0].querySelectorAll('h2');
+
     this.randomIndexArray = this.getRandomIndexArray(this.qaData.size);
     this.randomCnt = 0;
 
@@ -474,7 +474,8 @@
 
   Practice.prototype.displayNewQuestion = function() {
     const that = this;
-    this.selectedData = this.qaData.get(this.randomIndexArray[this.randomCnt]+1);
+    this.selectedDataId = this.randomIndexArray[this.randomCnt]+1;
+    this.selectedData = this.qaData.get(this.selectedDataId);
     this.practiceQuestionElm.innerHTML = this.selectedData.question;
     this.practiceAnswersElm.innerHTML = '';
     const seletedAnswerArrayLength = this.selectedData.answer.length;
@@ -490,6 +491,9 @@
         that.playAudio(that.answerAudioDdElms[cnt].textContent, 1, this);
       });
     }
+
+    this.clipIconElm = document.querySelector('.js-clipIcon');
+    this.clipIconElm.textContent = (this.selectedData.clip) ? 'クリップアイコン' : 'クリップを外す';
   };
 
   Practice.prototype.getRandomIndexArray = function(aLength) {
@@ -523,6 +527,37 @@
     });
     this.questionAudioIconElm.addEventListener('click', function() {
       that.playAudio(that.selectedData.question, 0 ,this);
+    });
+
+    const tabIndexArray = [[1,2],[0,2],[0,1]];
+    let practiceContentsElms = document.querySelectorAll('.js-practiceContents');
+    let practiceDescriptionElm = document.querySelector('.js-practiceDescription');
+    let practiceDescriptionTextArray = ['登録した質問をランダムで出題します。', 'クリップした質問をランダムで出題します。', 'リスト登録した質問を登録の順番で出題します。'];
+    for(let cnt=0,len=this.tabPracticeH2Elms.length;cnt<len;++cnt) {
+      this.tabPracticeH2Elms[cnt].addEventListener('click', function() {
+        for(let cnt2=0;cnt2<2;++cnt2) {
+          that.tabPracticeH2Elms[tabIndexArray[cnt][cnt2]].parentNode.classList.remove('active');
+        }
+        if(cnt==2) {
+          practiceContentsElms[0].classList.add('disp--none');
+          practiceContentsElms[1].classList.remove('disp--none');
+        }
+        else {
+          practiceContentsElms[1].classList.add('disp--none');
+          practiceContentsElms[0].classList.remove('disp--none');
+        }
+
+        this.parentNode.classList.add('active');
+        practiceDescriptionElm.innerHTML = practiceDescriptionTextArray[cnt];
+      });
+    }
+
+    let clip = this.selectedData.clip;
+    this.clipIconElm.addEventListener('click', function() {
+      clip = !clip;
+      that.qaData.set(that.selectedDataId, { question:that.selectedData.question, answer:that.selectedData.answer, category:that.selectedData.category, clip:clip});
+      localStorage.setItem('qaData', JSON.stringify([...that.qaData]));
+      this.textContent = (clip) ? 'クリップアイコン' : 'クリップを外す';
     });
   };
 
