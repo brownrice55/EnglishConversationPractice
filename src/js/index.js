@@ -17,6 +17,19 @@
 
   let voiceLangDataGlobal = JSON.parse(localStorage.getItem('voiceLangData')) || ['en-GB', 'en-GB'];
 
+
+  const getQaDataForRetry = () => {
+    let qaDataForRetry = new Map();
+    let keyCnt = 0;
+    qaDataGlobal.forEach((value, key) => {
+      if(value.clip) {
+        qaDataForRetry.set(++keyCnt, { question:value.question, answer:value.answer, category:value.category, clip:value.clip});
+      }
+    });
+    return qaDataForRetry;
+  };
+
+
   const GlobalMenu = function() {
     this.initialize.apply(this, arguments);
   };
@@ -26,6 +39,11 @@
     this.headerNavMenuCloseBtnElm = document.querySelector('.js-headerNavMenuCloseBtn');
     this.headerNavMenuLiElms = document.querySelectorAll('.js-headerNavMenu li');
     this.sectionElms = document.querySelectorAll('section');
+    this.tabPracticeLiElms = tabUlElmsGlobal[0].querySelectorAll('li');
+    let qaDataForRetry = getQaDataForRetry();
+    if(!qaDataForRetry.size) {
+      this.tabPracticeLiElms[1].classList.add('disp--none');
+    }
   };
 
   GlobalMenu.prototype.setEvent = function() {
@@ -425,14 +443,18 @@
     this.practiceDisplayAnswerBtnElm = document.querySelector('.js-practiceDisplayAnswerBtn');
     this.practiceDisplayNextQuestionBtnElm = document.querySelector('.js-practiceDisplayNextQuestionBtn');
 
-    this.tabPracticeH2Elms = tabUlElmsGlobal[0].querySelectorAll('h2');
-
-    this.randomIndexArray = this.getRandomIndexArray(this.qaData.size);
-    this.randomCnt = 0;
+    this.tabPracticeLiElms = tabUlElmsGlobal[0].querySelectorAll('li');
+    this.tabPracticeLiIndex = 0;
 
     this.voiceLangData = voiceLangDataGlobal;
     this.voice = new SpeechSynthesisUtterance();
     this.questionAudioIconElm = document.querySelector('.js-questionAudioIcon');
+
+    this.randomIndexArray = this.getRandomIndexArray(this.qaData.size);
+    this.randomCnt = 0;
+    this.qaDataForRetry = new Map();
+    this.selectedQaData = this.qaData;
+    this.qaDataForRetry = getQaDataForRetry();
   };
 
   Practice.prototype.resetDisabled = function(aTargetIconElm) {
@@ -475,7 +497,7 @@
   Practice.prototype.displayNewQuestion = function() {
     const that = this;
     this.selectedDataId = this.randomIndexArray[this.randomCnt]+1;
-    this.selectedData = this.qaData.get(this.selectedDataId);
+    this.selectedData = this.selectedQaData.get(this.selectedDataId);
     this.practiceQuestionElm.innerHTML = this.selectedData.question;
     this.practiceAnswersElm.innerHTML = '';
     const seletedAnswerArrayLength = this.selectedData.answer.length;
@@ -493,7 +515,7 @@
     }
 
     this.clipIconElm = document.querySelector('.js-clipIcon');
-    this.clipIconElm.textContent = (this.selectedData.clip) ? 'クリップアイコン' : 'クリップを外す';
+    this.clipIconElm.textContent = (this.selectedData.clip) ? 'クリップを外す' : 'クリップアイコン';
   };
 
   Practice.prototype.getRandomIndexArray = function(aLength) {
@@ -522,6 +544,10 @@
       this.parentNode.classList.add('disp--none');
       that.practiceDisplayAnswerBtnElm.parentNode.classList.remove('disp--none');
       ++that.randomCnt;
+      if(that.randomCnt==that.randomIndexArray.length) {//repeat
+        that.randomCnt = 0;
+        that.randomIndexArray = that.getRandomIndexArray(that.selectedQaData.size);
+      }
       that.displayNewQuestion();
       that.resetDisabled(that.questionAudioIconElm);
     });
@@ -533,22 +559,32 @@
     let practiceContentsElms = document.querySelectorAll('.js-practiceContents');
     let practiceDescriptionElm = document.querySelector('.js-practiceDescription');
     let practiceDescriptionTextArray = ['登録した質問をランダムで出題します。', 'クリップした質問をランダムで出題します。', 'リスト登録した質問を登録の順番で出題します。'];
-    for(let cnt=0,len=this.tabPracticeH2Elms.length;cnt<len;++cnt) {
-      this.tabPracticeH2Elms[cnt].addEventListener('click', function() {
+    for(let cnt=0,len=this.tabPracticeLiElms.length;cnt<len;++cnt) {
+      this.tabPracticeLiElms[cnt].addEventListener('click', function() {
         for(let cnt2=0;cnt2<2;++cnt2) {
-          that.tabPracticeH2Elms[tabIndexArray[cnt][cnt2]].parentNode.classList.remove('active');
+          that.tabPracticeLiElms[tabIndexArray[cnt][cnt2]].classList.remove('active');
         }
-        if(cnt==2) {
-          practiceContentsElms[0].classList.add('disp--none');
-          practiceContentsElms[1].classList.remove('disp--none');
+        let contentsIndexArray = (cnt==2) ? [0,1] : [1,0];
+        practiceContentsElms[contentsIndexArray[0]].classList.add('disp--none');
+        practiceContentsElms[contentsIndexArray[1]].classList.remove('disp--none');
+
+        this.classList.add('active');
+        practiceDescriptionElm.innerHTML = practiceDescriptionTextArray[cnt];
+
+        that.tabPracticeLiIndex = parseInt(this.dataset.index);
+        if(that.tabPracticeLiIndex) {
+          that.clipIconElm.classList.add('disp--none');
         }
         else {
-          practiceContentsElms[1].classList.add('disp--none');
-          practiceContentsElms[0].classList.remove('disp--none');
+          that.clipIconElm.classList.remove('disp--none');
         }
 
-        this.parentNode.classList.add('active');
-        practiceDescriptionElm.innerHTML = practiceDescriptionTextArray[cnt];
+        if(that.tabPracticeLiIndex!=2) {
+          that.selectedQaData = (that.tabPracticeLiIndex) ? that.qaDataForRetry : that.qaData;
+          that.randomIndexArray = that.getRandomIndexArray(that.selectedQaData.size);
+          that.randomCnt = 0;
+          that.displayNewQuestion();
+        }
       });
     }
 
@@ -557,7 +593,17 @@
       clip = !clip;
       that.qaData.set(that.selectedDataId, { question:that.selectedData.question, answer:that.selectedData.answer, category:that.selectedData.category, clip:clip});
       localStorage.setItem('qaData', JSON.stringify([...that.qaData]));
-      this.textContent = (clip) ? 'クリップアイコン' : 'クリップを外す';
+      this.textContent = (clip) ? 'クリップを外す' : 'クリップアイコン';
+      that.qaDataForRetry = getQaDataForRetry();
+      that.selectedQaData = (that.tabPracticeLiIndex) ? that.qaDataForRetry : that.qaData;
+      that.randomIndexArray = that.getRandomIndexArray(that.selectedQaData.size);
+      
+      if(!that.qaDataForRetry.size) {
+        that.tabPracticeLiElms[1].classList.add('disp--none');
+      }
+      else {
+        that.tabPracticeLiElms[1].classList.remove('disp--none');
+      }
     });
   };
 

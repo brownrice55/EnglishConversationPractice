@@ -67,7 +67,7 @@ Could you please let me know if there are any errors in my English or code?</p>
 
 | 音声の設定 |  |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/6b599865-f9d9-40f1-910c-6c6910f2c378" width="200"> |  |  |
+| <img src="https://github.com/user-attachments/assets/535e32a7-3da4-4def-9085-4e7cfa8b71f0" width="200"> |  |  |
 
 ## references
 <ul>
