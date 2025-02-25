@@ -20,10 +20,9 @@
 
   const getQaDataForRetry = () => {
     let qaDataForRetry = new Map();
-    let keyCnt = 0;
     qaDataGlobal.forEach((value, key) => {
       if(value.clip) {
-        qaDataForRetry.set(++keyCnt, { question:value.question, answer:value.answer, category:value.category, clip:value.clip});
+        qaDataForRetry.set(key, { question:value.question, answer:value.answer, category:value.category, clip:value.clip});
       }
     });
     return qaDataForRetry;
@@ -455,6 +454,9 @@
     this.qaDataForRetry = new Map();
     this.selectedQaData = this.qaData;
     this.qaDataForRetry = getQaDataForRetry();
+
+    this.practiceSelectElm = document.querySelector('.js-practiceSelect select');
+    this.categoryNameData = categoryNameDataGlobal;
   };
 
   Practice.prototype.resetDisabled = function(aTargetIconElm) {
@@ -495,9 +497,17 @@
   };
 
   Practice.prototype.displayNewQuestion = function() {
+    this.resetDispNone();
     const that = this;
-    this.selectedDataId = this.randomIndexArray[this.randomCnt]+1;
-    this.selectedData = this.selectedQaData.get(this.selectedDataId);
+    this.selectedDataRandomIndex = this.randomIndexArray[this.randomCnt];
+
+    let arrayConvertFromSelectedQaDataInto = [];
+    for(const [id,value] of this.selectedQaData.entries()){
+      arrayConvertFromSelectedQaDataInto.push({id,value})
+    }
+    this.selectedDataId = arrayConvertFromSelectedQaDataInto[this.selectedDataRandomIndex].id;
+
+    this.selectedData = arrayConvertFromSelectedQaDataInto[this.selectedDataRandomIndex].value;
     this.practiceQuestionElm.innerHTML = this.selectedData.question;
     this.practiceAnswersElm.innerHTML = '';
     const seletedAnswerArrayLength = this.selectedData.answer.length;
@@ -531,6 +541,30 @@
     return array;
   };
 
+  Practice.prototype.displayCategoryOptions = function() {
+    this.practiceSelectElm.innerHTML = '<option value="all">全ての会話</option>';
+    let optionArrayTentative = [];
+    this.qaData.forEach((value, key) => {
+      if(this.categoryNameData.find(element => element.name==value.category)) {
+        optionArrayTentative.push(value.category);
+      }
+    });
+    const optionArray = Array.from(new Set(optionArrayTentative));
+
+    for(let cnt=0,len=optionArray.length;cnt<len;++cnt) {
+      const optionElm = document.createElement('option');
+      optionElm.value = optionArray[cnt];
+      optionElm.textContent = optionArray[cnt];
+      this.practiceSelectElm.appendChild(optionElm);
+    }
+  };
+
+  Practice.prototype.resetDispNone = function() {
+    this.practiceAnswersElm.classList.add('disp--none');
+    this.practiceDisplayAnswerBtnElm.parentNode.classList.remove('disp--none');
+    this.practiceDisplayNextQuestionBtnElm.parentNode.classList.add('disp--none');
+  };
+
   Practice.prototype.setEvent = function() {
     const that = this;
     this.practiceDisplayAnswerBtnElm.addEventListener('click', function() {
@@ -559,6 +593,9 @@
     let practiceContentsElms = document.querySelectorAll('.js-practiceContents');
     let practiceDescriptionElm = document.querySelector('.js-practiceDescription');
     let practiceDescriptionTextArray = ['登録した質問をランダムで出題します。', 'クリップした質問をランダムで出題します。', 'リスト登録した質問を登録の順番で出題します。'];
+    
+    this.displayCategoryOptions();
+
     for(let cnt=0,len=this.tabPracticeLiElms.length;cnt<len;++cnt) {
       this.tabPracticeLiElms[cnt].addEventListener('click', function() {
         for(let cnt2=0;cnt2<2;++cnt2) {
@@ -573,20 +610,45 @@
 
         that.tabPracticeLiIndex = parseInt(this.dataset.index);
         if(that.tabPracticeLiIndex) {
-          that.clipIconElm.classList.add('disp--none');
+          that.practiceSelectElm.parentNode.classList.add('disp--none');
         }
         else {
-          that.clipIconElm.classList.remove('disp--none');
+          that.practiceSelectElm.parentNode.classList.remove('disp--none');
         }
 
         if(that.tabPracticeLiIndex!=2) {
-          that.selectedQaData = (that.tabPracticeLiIndex) ? that.qaDataForRetry : that.qaData;
+          if(that.tabPracticeLiIndex) {
+            that.selectedQaData = that.qaDataForRetry;
+          }
+          else {
+            that.selectedQaData = (that.practiceSelectElm.value=='all') ? that.qaData : that.qaDataForSelected;
+          }
           that.randomIndexArray = that.getRandomIndexArray(that.selectedQaData.size);
           that.randomCnt = 0;
           that.displayNewQuestion();
         }
       });
     }
+
+    this.qaDataForSelected = new Map();
+    this.practiceSelectElm.addEventListener('change', function() {
+      that.qaDataForSelected = new Map();
+      let eventTarget = event.target;
+      if(eventTarget.value=='all') {
+        that.selectedQaData = that.qaData;
+      }
+      else {
+        that.qaData.forEach((value, key) => {
+          if(eventTarget.value==value.category) {
+            that.qaDataForSelected.set(key, { question:value.question, answer:value.answer, category:value.category, clip:value.clip});
+          }
+        });  
+        that.selectedQaData = that.qaDataForSelected;
+      }
+      that.randomIndexArray = that.getRandomIndexArray(that.selectedQaData.size);
+      that.randomCnt = 0;
+      that.displayNewQuestion();
+    });
 
     let clip = this.selectedData.clip;
     this.clipIconElm.addEventListener('click', function() {
@@ -595,8 +657,10 @@
       localStorage.setItem('qaData', JSON.stringify([...that.qaData]));
       this.textContent = (clip) ? 'クリップを外す' : 'クリップアイコン';
       that.qaDataForRetry = getQaDataForRetry();
-      that.selectedQaData = (that.tabPracticeLiIndex) ? that.qaDataForRetry : that.qaData;
-      that.randomIndexArray = that.getRandomIndexArray(that.selectedQaData.size);
+      if(that.tabPracticeLiIndex) {
+        that.selectedQaData = that.qaDataForRetry;
+        that.randomIndexArray = that.getRandomIndexArray(that.selectedQaData.size);
+      }
       
       if(!that.qaDataForRetry.size) {
         that.tabPracticeLiElms[1].classList.add('disp--none');

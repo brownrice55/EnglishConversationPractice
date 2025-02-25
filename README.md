@@ -39,7 +39,7 @@ Could you please let me know if there are any errors in my English or code?</p>
 
 | 練習1 | 練習2 |  |
 | ---- | ---- | ---- |
-| <img src="https://github.com/user-attachments/assets/4e90bf6c-6cd4-4fed-bc32-7c258a8beff8" width="200"> | <img src="https://github.com/user-attachments/assets/a67d9605-9abb-4e9b-a28d-fff90ce6c9dd" width="200"> |  |
+| <img src="https://github.com/user-attachments/assets/b8c3cf89-15ce-41e1-aa44-d64bee789225" width="200"> | <img src="https://github.com/user-attachments/assets/a7be2dee-ca05-4929-abb8-c02f2f7d5db4" width="200"> |  |
 
 | 練習3 | 練習3 |  |
 | ---- | ---- | ---- |

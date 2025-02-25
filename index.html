@@ -41,16 +41,19 @@
         <div>
           <p class="js-practiceDescription">登録した質問をランダムで出題します。</p>
           <p>音声の後に質問に答えてください。</p>
-            <select name="" id=""></select>
+        </div>
+        <div class="main__contents__select js-practiceSelect">
+          <select name="" id=""></select>
         </div>
       </div>
       <div class="js-practiceContents main__contents">
-        <div class="main__contents__clip">
-          <button class="js-clipIcon">クリップアイコン</button>
-        </div>
         <div class="main__contents__qa">
           <dl>
-            <dt>質問<button class="js-questionAudioIcon stop">停止アイコン</button></dt>
+            <dt>質問<button class="js-questionAudioIcon stop">停止アイコン</button>
+              <div class="main__contents__clip">
+                <button class="js-clipIcon">クリップアイコン</button>
+              </div>
+            </dt>
             <dd class="js-practiceQuestion"></dd>
           </dl>           
         </div>
@@ -62,14 +65,6 @@
           <button class="js-practiceDisplayNextQuestionBtn">次の問題へ</button>
         </div>
       </div>
-      <!-- <div class="js-practiceContents main__contents disp--none">
-        <p>Q. 質問（英文）</p>
-        <i></i>
-        <button>回答例を見る</button>
-        <div class="disp--none">
-          回答例（英文）
-        </div>
-      </div> -->
       <div class="js-practiceContents main__contents disp--none">
         <span>リスト</span>
         <select name="" id="">
