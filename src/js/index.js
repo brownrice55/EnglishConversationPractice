@@ -12,7 +12,7 @@
   const tabUlElmsGlobal = document.querySelectorAll('.js-tabUl');
 
   // ** settings
-  const categoryNameDefault = [{ num:1, name:'挨拶' }, { num:2, name:'趣味' }, { num:3, name:'仕事' }];
+  const categoryNameDefault = ['挨拶', '趣味', '仕事'];
   let categoryNameDataGlobal = JSON.parse(localStorage.getItem('categoryNameData')) || categoryNameDefault;
 
   let voiceLangDataGlobal = JSON.parse(localStorage.getItem('voiceLangData')) || ['en-GB', 'en-GB'];
@@ -301,12 +301,11 @@
 
     for(let cnt=0,len=this.categoryNameData.length;cnt<len;++cnt) {
       let optionElm = document.createElement('option');
-      optionElm.value = this.categoryNameData[cnt].name;
-      optionElm.textContent = this.categoryNameData[cnt].name;
-      optionElm.dataset.num = this.categoryNameData[cnt].num;
+      optionElm.value = this.categoryNameData[cnt];
+      optionElm.textContent = this.categoryNameData[cnt];
       this.registerQaCategorySelectElm.appendChild(optionElm);
     }
-    this.registerQaCategorySelectElm.value = this.categoryNameData[0].name;
+    this.registerQaCategorySelectElm.value = this.categoryNameData[0];
   };
 
   const Settings = function() {
@@ -358,7 +357,7 @@
   Settings.prototype.displayCategoryNameList = function() {
     let categoryNameSettingHTML = '<h3>カテゴリ名を追加</h3>';
     for(let cnt=0,len=this.categoryNameData.length;cnt<len;++cnt) {
-      categoryNameSettingHTML += '<div><input type="text" name="" id="" value="' + this.categoryNameData[cnt].name + '" dataset-num="' + this.categoryNameData[cnt].num + '"><button>削除</button></div>';
+      categoryNameSettingHTML += '<div><input type="text" name="" id="" value="' + this.categoryNameData[cnt] + '"><button>削除</button></div>';
     }
     this.categoryNameSettingAreaElm.innerHTML = categoryNameSettingHTML;
 
@@ -390,8 +389,7 @@
     let categoryNum = 0;
     for(let cnt=0,len=categoryNameSettingAreaInputElms.length;cnt<len;++cnt) {
       if(categoryNameSettingAreaInputElms[cnt].value) {
-        categoryNum = parseInt(categoryNameSettingAreaInputElms[cnt].dataset.num) || categoryNum+1;
-        inputArray.push({name: categoryNameSettingAreaInputElms[cnt].value, num: categoryNum});
+        inputArray.push(categoryNameSettingAreaInputElms[cnt].value);
       }
     }
 
@@ -545,7 +543,7 @@
     this.practiceSelectElm.innerHTML = '<option value="all">全ての会話</option>';
     let optionArrayTentative = [];
     this.qaData.forEach((value, key) => {
-      if(this.categoryNameData.find(element => element.name==value.category)) {
+      if(this.categoryNameData.find(element => element==value.category)) {
         optionArrayTentative.push(value.category);
       }
     });
