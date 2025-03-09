@@ -17,7 +17,6 @@
 
   let voiceLangDataGlobal = JSON.parse(localStorage.getItem('voiceLangData')) || ['en-GB', 'en-GB'];
 
-
   const getQaDataForRetry = () => {
     let qaDataForRetry = new Map();
     qaDataGlobal.forEach((value, key) => {
@@ -27,7 +26,6 @@
     });
     return qaDataForRetry;
   };
-
 
   const GlobalMenu = function() {
     this.initialize.apply(this, arguments);
@@ -43,6 +41,11 @@
     if(!qaDataForRetry.size) {
       this.tabPracticeLiElms[1].classList.add('disp--none');
     }
+  };
+
+  GlobalMenu.prototype.setInitialDisplay = function() {
+    let currentTabIndexNo = parseInt(localStorage.getItem('currentTab')) || 2;
+    this.sectionElms[(currentTabIndexNo-1)].classList.remove('disp--none');
   };
 
   GlobalMenu.prototype.setEvent = function() {
@@ -73,6 +76,7 @@
         that.headerNavMenuBtnElm.classList.remove('disp--none');
         that.headerNavMenuCloseBtnElm.parentNode.classList.add('disp--none');
         that.sectionElms[cnt].classList.remove('disp--none');
+        localStorage.setItem('currentTab', (cnt+1));
         for(let cnt2=0;cnt2<2;++cnt2) {
           that.sectionElms[sectionIndexArray[cnt][cnt2]].classList.add('disp--none');
         }
@@ -82,6 +86,7 @@
 
   GlobalMenu.prototype.run = function() {
     this.setEvent();
+    this.setInitialDisplay();
   };
 
   const QaDataManagement = function() {
@@ -130,7 +135,6 @@
     let id = (this.tabIndexNo) ? parseInt(this.qaListId) : this.qaData.size+1;
     this.qaData.set(id, { question:this.registerQaTextAreaElms[0].value, answer:answerArray, category:this.registerQaCategorySelectElm.value, clip:false});
     localStorage.setItem('qaData', JSON.stringify([...this.qaData]));
-    localStorage.setItem('tabQa', this.tabIndexNo);
     window.location.reload(false); // **後で見直し
   };
 
@@ -213,6 +217,7 @@
     this.tabLiQaElms[this.tabIndexArray[this.tabIndexNo][1]].classList.add('active');
     this.contentsDivElms[this.tabIndexArray[this.tabIndexNo][0]].classList.add('disp--none');
     this.contentsDivElms[this.tabIndexArray[this.tabIndexNo][1]].classList.remove('disp--none');
+    localStorage.setItem('tabQa', this.tabIndexNo);
   };
 
   QaDataManagement.prototype.reset = function() {
@@ -222,6 +227,23 @@
       this.registerQaTextAreaElms[0].value = '';
     }
     this.registerQaAnswerDivElm.innerHTML = '<h3>回答例（英語）<span class="required">※</span></h3><textarea name="" id=""></textarea>';
+  };
+
+  QaDataManagement.prototype.setInitialDisplay = function() {
+    if(this.tabIndexNo) {
+      this.tabLiQaElms[this.tabIndexArray[this.tabIndexNo][0]].classList.remove('active');
+      this.tabLiQaElms[this.tabIndexArray[this.tabIndexNo][1]].classList.add('active');
+      this.contentsDivElms[this.tabIndexArray[this.tabIndexNo][0]].classList.add('disp--none');
+      this.contentsDivElms[this.tabIndexArray[this.tabIndexNo][1]].classList.remove('disp--none');
+    }
+
+    for(let cnt=0,len=this.categoryNameData.length;cnt<len;++cnt) {
+      let optionElm = document.createElement('option');
+      optionElm.value = this.categoryNameData[cnt];
+      optionElm.textContent = this.categoryNameData[cnt];
+      this.registerQaCategorySelectElm.appendChild(optionElm);
+    }
+    this.registerQaCategorySelectElm.value = this.categoryNameData[0];
   };
 
   QaDataManagement.prototype.setEvent = function() {
@@ -292,20 +314,7 @@
 
   QaDataManagement.prototype.run = function() {
     this.setEvent();
-    if(this.tabIndexNo) {
-      this.tabLiQaElms[this.tabIndexArray[this.tabIndexNo][0]].classList.remove('active');
-      this.tabLiQaElms[this.tabIndexArray[this.tabIndexNo][1]].classList.add('active');
-      this.contentsDivElms[this.tabIndexArray[this.tabIndexNo][0]].classList.add('disp--none');
-      this.contentsDivElms[this.tabIndexArray[this.tabIndexNo][1]].classList.remove('disp--none');
-    }
-
-    for(let cnt=0,len=this.categoryNameData.length;cnt<len;++cnt) {
-      let optionElm = document.createElement('option');
-      optionElm.value = this.categoryNameData[cnt];
-      optionElm.textContent = this.categoryNameData[cnt];
-      this.registerQaCategorySelectElm.appendChild(optionElm);
-    }
-    this.registerQaCategorySelectElm.value = this.categoryNameData[0];
+    this.setInitialDisplay();
   };
 
   const Settings = function() {
@@ -563,6 +572,45 @@
     this.practiceDisplayNextQuestionBtnElm.parentNode.classList.add('disp--none');
   };
 
+
+  Practice.prototype.displayPages = function(aCnt) {
+    const targetTab = this.tabPracticeLiElms[aCnt];
+    const tabIndexArray = [[1,2],[0,2],[0,1]];
+    let practiceContentsElms = document.querySelectorAll('.js-practiceContents');
+    let practiceDescriptionElm = document.querySelector('.js-practiceDescription');
+    let practiceDescriptionTextArray = ['登録した質問をランダムで出題します。', 'クリップした質問をランダムで出題します。', 'リスト登録した質問を登録の順番で出題します。'];
+
+    for(let cnt=0;cnt<2;++cnt) {
+      this.tabPracticeLiElms[tabIndexArray[aCnt][cnt]].classList.remove('active');
+    }
+    let contentsIndexArray = (aCnt==2) ? [0,1] : [1,0];
+    practiceContentsElms[contentsIndexArray[0]].classList.add('disp--none');
+    practiceContentsElms[contentsIndexArray[1]].classList.remove('disp--none');
+
+    targetTab.classList.add('active');
+    practiceDescriptionElm.innerHTML = practiceDescriptionTextArray[aCnt];
+
+    this.tabPracticeLiIndex = parseInt(targetTab.dataset.index);
+    if(this.tabPracticeLiIndex) {
+      this.practiceSelectElm.parentNode.classList.add('disp--none');
+    }
+    else {
+      this.practiceSelectElm.parentNode.classList.remove('disp--none');
+    }
+
+    if(this.tabPracticeLiIndex!=2) {
+      if(this.tabPracticeLiIndex) {
+        this.selectedQaData = this.qaDataForRetry;
+      }
+      else {
+        this.selectedQaData = (this.practiceSelectElm.value=='all') ? this.qaData : this.qaDataForSelected;
+      }
+      this.randomIndexArray = this.getRandomIndexArray(this.selectedQaData.size);
+      this.randomCnt = 0;
+      this.displayNewQuestion();
+    }
+  };
+
   Practice.prototype.setEvent = function() {
     const that = this;
     this.practiceDisplayAnswerBtnElm.addEventListener('click', function() {
@@ -587,46 +635,18 @@
       that.playAudio(that.selectedData.question, 0 ,this);
     });
 
-    const tabIndexArray = [[1,2],[0,2],[0,1]];
-    let practiceContentsElms = document.querySelectorAll('.js-practiceContents');
-    let practiceDescriptionElm = document.querySelector('.js-practiceDescription');
-    let practiceDescriptionTextArray = ['登録した質問をランダムで出題します。', 'クリップした質問をランダムで出題します。', 'リスト登録した質問を登録の順番で出題します。'];
-    
     this.displayCategoryOptions();
 
     for(let cnt=0,len=this.tabPracticeLiElms.length;cnt<len;++cnt) {
       this.tabPracticeLiElms[cnt].addEventListener('click', function() {
-        for(let cnt2=0;cnt2<2;++cnt2) {
-          that.tabPracticeLiElms[tabIndexArray[cnt][cnt2]].classList.remove('active');
-        }
-        let contentsIndexArray = (cnt==2) ? [0,1] : [1,0];
-        practiceContentsElms[contentsIndexArray[0]].classList.add('disp--none');
-        practiceContentsElms[contentsIndexArray[1]].classList.remove('disp--none');
-
-        this.classList.add('active');
-        practiceDescriptionElm.innerHTML = practiceDescriptionTextArray[cnt];
-
-        that.tabPracticeLiIndex = parseInt(this.dataset.index);
-        if(that.tabPracticeLiIndex) {
-          that.practiceSelectElm.parentNode.classList.add('disp--none');
-        }
-        else {
-          that.practiceSelectElm.parentNode.classList.remove('disp--none');
-        }
-
-        if(that.tabPracticeLiIndex!=2) {
-          if(that.tabPracticeLiIndex) {
-            that.selectedQaData = that.qaDataForRetry;
-          }
-          else {
-            that.selectedQaData = (that.practiceSelectElm.value=='all') ? that.qaData : that.qaDataForSelected;
-          }
-          that.randomIndexArray = that.getRandomIndexArray(that.selectedQaData.size);
-          that.randomCnt = 0;
-          that.displayNewQuestion();
-        }
+        that.displayPages(cnt);
+        localStorage.setItem('tabPractice', (cnt+1));
       });
     }
+
+    //* initial
+    let practiceTabIndexNo = parseInt(localStorage.getItem('tabPractice')) || 2;
+    this.displayPages(practiceTabIndexNo-1);
 
     this.qaDataForSelected = new Map();
     this.practiceSelectElm.addEventListener('change', function() {
