@@ -4,6 +4,7 @@
 $colorFont: #333;
 $colorWhite: #fff;
 $colorKeyLight: #eee;
+$colorKeyMedium: #ccc;
 $colorKeyDark: #666;
 $colorAttention: #f66;
 
@@ -16,6 +17,10 @@ $colorAttention: #f66;
   padding: $padding;
   margin: $margin;
   font-size: rem($fontSize);
+  &:disabled {
+    background: $colorKeyLight;
+    color: $colorKeyMedium;
+  }
 }
 @mixin inputText {
   border: 1px solid $colorKeyDark;

@@ -334,6 +334,7 @@
 
     this.categoryNameData = categoryNameDataGlobal;
     this.categoryNameSettingAreaElm = document.querySelector('.js-categoryNameSettingArea');
+    this.isCategoryNameDeleted = false;
 
     this.voiceLangData = voiceLangDataGlobal;
     this.settingsVoiceElms = document.querySelectorAll('.js-settingsVoice');
@@ -364,6 +365,7 @@
   };
 
   Settings.prototype.displayCategoryNameList = function() {
+    const that = this;
     let categoryNameSettingHTML = '<h3>カテゴリ名を追加</h3>';
     for(let cnt=0,len=this.categoryNameData.length;cnt<len;++cnt) {
       categoryNameSettingHTML += '<div><input type="text" name="" id="" value="' + this.categoryNameData[cnt] + '"><button>削除</button></div>';
@@ -374,7 +376,48 @@
     for(let cnt=0,len=deleteButtonElms.length;cnt<len;++cnt) {
       deleteButtonElms[cnt].addEventListener('click', function() {
         this.parentNode.remove();
+        that.isCategoryNameDeleted = true;
+        that.changeDisabledToSaveCategoryNameData();
       });
+    }
+  };
+
+  Settings.prototype.getNewCategoryInputValueData = function(aInputElms, aInputLength) {
+    let isInputValueFilled = 0;
+    for(let cnt=0;cnt<aInputLength;++cnt) {
+      if(aInputElms[cnt].value) {
+        ++isInputValueFilled;
+      }
+    }
+    if(!isInputValueFilled) { return; }
+    this.newInputValueArray = [];
+    let categoryNum = 0;
+    for(let cnt=0;cnt<aInputLength;++cnt) {
+      if(aInputElms[cnt].value) {
+        this.newInputValueArray.push(aInputElms[cnt].value);
+      }
+    }
+  };
+
+  Settings.prototype.commonChangeDisabledToSaveCategoryNameData = function(aCategoryNameSettingAreaInputElms, aCategoryLength) {
+    this.getNewCategoryInputValueData(aCategoryNameSettingAreaInputElms, aCategoryLength);
+    this.categoryNameRegisterBtnElm.disabled = (JSON.stringify(this.categoryNameData)==JSON.stringify(this.newInputValueArray)) ? true : false;
+  };
+
+  Settings.prototype.changeDisabledToSaveCategoryNameData = function() {
+    const that = this;
+    let categoryNameSettingAreaInputElms = this.categoryNameSettingAreaElm.querySelectorAll('input');
+    let categoryLength = categoryNameSettingAreaInputElms.length;
+    if(this.isCategoryNameDeleted) {
+      this.commonChangeDisabledToSaveCategoryNameData(categoryNameSettingAreaInputElms, categoryLength);
+      this.isCategoryNameDeleted = false;
+    }
+    else {
+      for(let cnt=0;cnt<categoryLength;++cnt) {
+        categoryNameSettingAreaInputElms[cnt].addEventListener('keyup', function() {
+          that.commonChangeDisabledToSaveCategoryNameData(categoryNameSettingAreaInputElms, categoryLength);
+        });
+      }  
     }
   };
 
@@ -382,27 +425,11 @@
     const div = document.createElement('div');
     div.innerHTML = '<input type="text" name="" id="" value="">';
     this.categoryNameSettingAreaElm.appendChild(div);
+    this.changeDisabledToSaveCategoryNameData();
   };
 
   Settings.prototype.saveCategoryName = function() {
-    let categoryNameSettingAreaInputElms = this.categoryNameSettingAreaElm.querySelectorAll('input');
-    let isInputValueFilled = 0;
-    for(let cnt=0,len=categoryNameSettingAreaInputElms.length;cnt<len;++cnt) {
-      if(categoryNameSettingAreaInputElms[cnt].value) {
-        ++isInputValueFilled;
-      }
-    }
-    if(!isInputValueFilled) { return; }
-
-    let inputArray = [];
-    let categoryNum = 0;
-    for(let cnt=0,len=categoryNameSettingAreaInputElms.length;cnt<len;++cnt) {
-      if(categoryNameSettingAreaInputElms[cnt].value) {
-        inputArray.push(categoryNameSettingAreaInputElms[cnt].value);
-      }
-    }
-
-    this.categoryNameData = inputArray;
+    this.categoryNameData = this.newInputValueArray;
     localStorage.setItem('categoryNameData', JSON.stringify([...this.categoryNameData]));
     window.location.reload(false); // **後で見直し
   };
@@ -427,6 +454,8 @@
       localStorage.setItem('voiceLangData', JSON.stringify([that.settingsVoiceElms[0].value, that.settingsVoiceElms[1].value]));
       window.location.reload(false); // **後で見直し
     });
+
+    this.changeDisabledToSaveCategoryNameData();
   };
 
   Settings.prototype.run = function() {
