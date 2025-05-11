@@ -1,3 +1,6 @@
+<p>2025/5/11追記<br>他に先に作りたいものができたりして、途中で実装を止めています。そのうち再開します。</p>
+<hr>
+
 <p>I'm creating this program to enhance my programming skills and pursue my hobbies.
 Furthermore, this program is incomplete, and I am still uncertain about my programming skills.</p>
 <p>このプログラムは個人の趣味で自分のプログラムの勉強のために書いています。
