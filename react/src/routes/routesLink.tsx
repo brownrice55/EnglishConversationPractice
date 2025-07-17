@@ -6,8 +6,7 @@ import {
 
 import App from "../App";
 import Practice from "../pages/Practice";
-import Add from "../pages/Add";
-import Edit from "../pages/Edit";
+import AddOrEdit from "../pages/AddOrEdit";
 import Settings from "../pages/Settings";
 import Audio from "../pages/settings/Audio";
 import Category from "../pages/settings/Category";
@@ -19,8 +18,8 @@ const routesLink = createBrowserRouter(
   createRoutesFromElements(
     <Route element={<App />}>
       <Route path="/" element={<Practice />} />
-      <Route path="/add" element={<Add />} />
-      <Route path="/edit" element={<Edit />} />
+      <Route path="/add" element={<AddOrEdit activeKey="/add" />} />
+      <Route path="/edit" element={<AddOrEdit activeKey="/edit" />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/settings/audio" element={<Audio />} />
       <Route path="/settings/category" element={<Category />} />

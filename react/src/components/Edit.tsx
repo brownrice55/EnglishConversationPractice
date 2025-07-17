@@ -1,13 +1,13 @@
-import Header from "../components/Header";
-export default function Settings() {
+import Header from "./Header";
+export default function Edit() {
   return (
     <>
       <Header
-        title="設定"
+        title="編集・削除"
         description="練習のページです"
         keywords="英語,英語 勉強"
       />
-      <p>Settings</p>
+      <p>Edit</p>
     </>
   );
 }

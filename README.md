@@ -76,7 +76,7 @@ Could you please let me know if there are any errors in my English or code?</p>
 
 ## JavaScript で実装
 
-### references
+### 参考
 
 <ul>
   <li>https://codepen.io/vkjgr/details/VYMeXp</li>
@@ -95,4 +95,10 @@ Could you please let me know if there are any errors in my English or code?</p>
 <ul>
 <li>https://react-bootstrap.github.io/</li>
 <li>https://react-hook-form.com/</li>
+</ul>
+
+### useFieldArray 関連
+
+<ul>
+<li>https://zenn.dev/azunasu/articles/3c35c2501dc31a</li>
 </ul>
