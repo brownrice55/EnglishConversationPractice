@@ -1,6 +1,6 @@
-node_modules
-package-lock.json
-package.json
-gulpfile.js
-dest
-src/sass/_destyle.scss
+js/node_modules
+js/package-lock.json
+js/package.json
+js/gulpfile.js
+js/dest
+js/src/sass/_destyle.scss

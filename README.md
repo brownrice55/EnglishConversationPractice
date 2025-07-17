@@ -72,12 +72,13 @@ Could you please let me know if there are any errors in my English or code?</p>
 | ---- | ---- | ---- |
 | <img src="https://github.com/user-attachments/assets/535e32a7-3da4-4def-9085-4e7cfa8b71f0" width="200"> |  |  |
 
-## references
+## JavaScript で実装
+### references
 <ul>
   <li>https://codepen.io/vkjgr/details/VYMeXp</li>
 </ul>
 
-## reset css
+### reset css
 <ul>
   <li>https://github.com/nicolas-cusan/destyle.css</li>
 </ul>
