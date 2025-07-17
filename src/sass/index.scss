@@ -1,0 +1,346 @@
+@use 'sass:math';
+@use '_destyle';
+
+$colorFont: #333;
+$colorWhite: #fff;
+$colorKeyLight: #eee;
+$colorKeyMedium: #ccc;
+$colorKeyDark: #666;
+$colorAttention: #f66;
+
+@function rem($px) {
+  @return math.div($px, 16px) * 1rem;
+}
+@mixin btn($fontSize, $padding, $margin) {
+  background: $colorKeyDark;
+  color: $colorKeyLight;
+  padding: $padding;
+  margin: $margin;
+  font-size: rem($fontSize);
+  &:disabled {
+    background: $colorKeyLight;
+    color: $colorKeyMedium;
+  }
+}
+@mixin inputText {
+  border: 1px solid $colorKeyDark;
+  background: $colorKeyLight;
+  text-align: left;
+  padding: 10px;
+}
+@mixin select { /*! Copyright (c) 2025 by Veiko (https://codepen.io/vkjgr/pen/VYMeXp) */
+  width: 100%;
+  border: 1px solid $colorKeyDark;
+  display: block;
+  padding: 10px 80px 10px 20px;
+  margin: 0;
+  box-sizing: border-box;
+  background-image:
+  linear-gradient(45deg, transparent 50%, $colorKeyDark 50%),
+  linear-gradient(135deg, $colorKeyDark 50%, transparent 50%),
+  linear-gradient(to right, $colorKeyDark, $colorKeyDark);
+  background-position:
+    calc(100% - 20px) 20px,
+    calc(100% - 15px) 20px,
+    calc(100% - 40px) 10px;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 25px;
+  background-repeat: no-repeat;
+  &:focus {
+    outline: none;
+  }
+}
+
+body {
+  font-size: rem(16px);
+  line-height: 1.4;
+  color: $colorFont;
+  margin: 0 auto;
+  padding: 0 auto;
+  text-align: center;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  background: $colorKeyLight;
+  padding: 10px;
+  &__appTitle {
+    font-size: rem(14px);
+    vertical-align: center;
+  }
+  &__nav {
+    button {
+      cursor: pointer;
+    }
+    &__menu {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      color: $colorWhite;
+      background: rgba(0, 0, 0, .7);
+      padding: 20px 40px;
+      text-align: left;
+      z-index: 1;
+      cursor: pointer;
+      ul {
+        padding: 20px 0;
+      }
+      li {
+        padding: 20px;
+        display: block;
+        border-bottom: 1px solid $colorWhite;
+        &:hover {
+          background: rgba(0, 0, 0, .2);
+        }
+      }
+      button {
+        color: $colorKeyLight;
+        background: $colorKeyDark;
+        padding: 10px;
+        position: fixed;
+        top: 10px;
+        right: 10px;
+      }
+    }
+  }
+}
+.main {
+  margin: 0 auto;
+  padding: 0 auto;
+  text-align: center;
+  &__title {
+    font-size: rem(18px);
+    font-weight: 200;
+  }
+  &__nav {
+    display: flex;
+    justify-content: space-between;
+    background: $colorKeyLight;
+    ul {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      li {
+        display: inline-block;
+        cursor: pointer;
+        padding: 10px 20px;
+        color: $colorFont;
+        &.active {
+          background: $colorWhite;
+          color: $colorFont;
+        }
+      }  
+    }
+  }
+  &__description {
+    padding: 10px;
+    font-size: rem(14px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    div {
+      padding: 20px;
+    }
+    p {
+      text-align: left;
+    }
+  }
+  &__contents {
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    padding: 0 5%;
+    &__qa {
+      text-align: left;
+      dl {
+        margin: 10px 0 30px;
+        line-height: 30px;
+      }
+      i {
+        cursor: pointer;
+      }
+    }
+    &__clip {
+      float:right;
+    }
+    &__orderedList {
+      padding: 10px;
+      counter-reset: number 0;
+      li {
+        position: relative;
+        padding: 20px 10px 10px 40px;
+        text-align: left;
+        display: flex;
+        &:before {
+          position: absolute;
+          counter-increment: number 1;
+          content: counter(number);
+          display:inline-block;
+          background: $colorKeyDark;
+          color: $colorKeyLight;
+          font-weight: 200;
+          left: 0;
+          width: 24px;
+          height: 24px;
+          line-height: 24px;
+          text-align: center;
+          vertical-align: center;
+        }
+        > div {
+          width: calc(100% - 40px);
+        }
+      }
+    }
+    &__listTitle {
+      padding: 30px 0 0;
+      text-align: left;
+      input[type='text'] {
+        @include inputText;
+        width: 100%;
+      }
+    }
+    &__textarea {
+      text-align: left;
+      margin: 15px 0 0;
+      textarea {
+        border: 1px solid $colorKeyDark;
+        background: $colorKeyLight;
+        width: 100%;
+        text-align: left;
+        padding: 10px;
+        margin: 0 0 10px;
+      }
+    }
+    &__select {
+      text-align: left;
+      select {
+        @include select;
+      }
+      &--settings {
+        text-align: left;
+        margin: 40px 0 0;
+        select {
+          @include select;
+        }
+      }
+    }
+    &__btn {
+      &--center {
+        text-align: center;
+        button {
+          @include btn(16px, 10px 20px, 20px);
+        }
+      }
+      &--right {
+        text-align: right;
+        button {
+          @include btn(16px, 10px 20px, 20px);
+        }
+      }
+    }
+    &__list {
+      margin: 30px 0 0;
+      >li {
+        border-bottom: 1px solid $colorKeyLight;
+        cursor: pointer;
+        text-align: left;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        p {
+          width: 100%;
+          height: 100%;
+          padding: 15px 0;
+        }
+      }
+      &__rightMenu {
+        position: relative;
+        ul {
+          position: absolute;
+          top: 20px;
+          right: -10px;
+          padding: 0;
+          width: 60px;
+          text-align: center;
+          font-size: rem(14px);
+          background: $colorKeyLight;
+          border-right: 1px solid $colorKeyDark;
+          border-bottom: 1px solid $colorKeyDark;
+          border-left: 1px solid $colorKeyDark;
+          z-index: 1;
+          &:before {
+            content: '▲';
+            color: $colorKeyDark;
+            font-size: rem(8px);
+            position: absolute;
+            top: -8px;
+            right: 12px;
+          }
+          li {
+            padding: 6px 15px;
+            border-top: 1px solid $colorKeyDark;
+          }
+        }
+      }
+      &__popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .5);
+        z-index: 1;
+        > div {
+          padding: 20px 40px;
+          background: $colorWhite;
+          color: $colorKeyDark;
+          z-index: 2;
+          button {
+            @include btn(14px, 10px 20px, 10px);
+          }
+        }
+      }
+    }
+    &__settingsList {
+      padding: 30px 0 0;
+      li {
+        text-align: left;
+        padding: 10px 0;
+        cursor: pointer;
+      }
+    }
+    &__categoryName {
+      padding: 30px 0 0;
+      text-align: left;
+      > div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        input[type='text'] {
+          @include inputText;
+          width: calc(100% - 40px);
+        }  
+      }
+    }
+  }
+}
+
+
+.disp--none {
+  display: none !important;
+}
+.required {
+  color: $colorAttention;
+  font-size: rem(12px);
+}
+.backToList {
+  cursor: pointer;
+}

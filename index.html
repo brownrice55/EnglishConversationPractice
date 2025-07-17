@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./dest/css/index.css" rel="stylesheet">
+  <title>英会話練習アプリ</title>
+</head>
+<body>
+  <header class="header">
+    <h1 class="header__appTitle">英会話練習アプリ</h1>
+    <nav class="header__nav">
+      <button class="js-headerNavMenuBtn">■</button>
+      <div class="header__nav__menu disp--none">
+        <button class="js-headerNavMenuCloseBtn">X</button>
+        <ul class="js-headerNavMenu">
+          <li>練習</li>
+          <li>新規登録・編集・削除</li>
+          <li>設定</li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main class="main">
+    <section class="js-practice disp--none">
+      <nav class="main__nav">
+        <h2 class="main__title">練習</h2>
+        <ul class="js-tabUl">
+          <li class="active" data-index="0">
+            <h2 class="main__title">ランダム</h2>
+          </li>
+          <li data-index="1">
+            <h2 class="main__title">もう一度</h2>
+          </li>
+          <li data-index="2">
+            <h2 class="main__title">リスト</h2>
+          </li>
+        </ul>
+      </nav>
+      <div class="main__description">
+        <div>
+          <p class="js-practiceDescription">登録した質問をランダムで出題します。</p>
+          <p>音声の後に質問に答えてください。</p>
+        </div>
+        <div class="main__contents__select js-practiceSelect">
+          <select name="" id=""></select>
+        </div>
+      </div>
+      <div class="js-practiceContents main__contents">
+        <div class="main__contents__qa">
+          <dl>
+            <dt>質問<button class="js-questionAudioIcon stop">停止アイコン</button>
+              <div class="main__contents__clip">
+                <button class="js-clipIcon">クリップアイコン</button>
+              </div>
+            </dt>
+            <dd class="js-practiceQuestion"></dd>
+          </dl>           
+        </div>
+        <div class="main__contents__btn--center">
+          <button class="js-practiceDisplayAnswerBtn">回答例を見る</button>
+        </div>
+        <div class="main__contents__qa disp--none js-practiceAnswers"></div>
+        <div class="main__contents__btn--center disp--none">
+          <button class="js-practiceDisplayNextQuestionBtn">次の問題へ</button>
+        </div>
+      </div>
+      <div class="js-practiceContents main__contents disp--none">
+        <span>リスト</span>
+        <select name="" id="">
+          <option value="">リスト名が入ります</option>
+          <option value="">リスト名が入ります</option>
+          <option value="">リスト名が入ります</option>
+        </select>
+        <button>スタート</button>
+      </div>
+    </section>
+    <section class="js-registerQA disp--none">
+      <nav class="main__nav">
+        <ul class="js-tabUl">
+          <li class="active" data-index="0">
+            <h2 class="main__title">質問と回答の新規登録</h2>
+          </li>
+          <li data-index="1">
+            <h2 class="main__title">一覧</h2>
+          </li>
+        </ul>
+      </nav>
+      <div class="main__contents js-registerQAcontentsDiv">
+        <div class="main__contents__textarea">
+          <h3>質問（英語）<span class="required">※</span></h3>
+          <textarea name="" id=""></textarea>
+        </div>
+        <div class="main__contents__textarea js-registerQAanswerDiv">
+          <h3>回答例（英語）<span class="required">※</span></h3>
+          <textarea name="" id=""></textarea> 
+        </div>
+        <div class="main__contents__btn--right">
+          <button>回答例を追加する</button>
+        </div> 
+        <div class="main__contents__select">
+          <h3>カテゴリ</h3>
+          <select name="" id="" class="js-registerQAcategorySelect"></select>
+        </div>
+        <div class="main__contents__btn--center">
+          <button class="disp--none">キャンセル</button>
+          <button>登録する</button>
+        </div>
+      </div>
+      <div class="main__contents js-registerQAcontentsDiv disp--none">
+        <div class="main__contents">
+          <ul class="main__contents__list js-qalistDataUl"></ul>
+        </div>
+      </div>
+    </section>
+    <section class="js-settings disp--none">
+      <nav class="main__nav">
+        <h2 class="main__title">設定</h2>
+      </nav>
+      <div class="main__contents">
+        <ul class="main__contents__settingsList js-settingsList">
+          <li data-index="0">音声設定</li>
+          <li data-index="1">カテゴリ名の設定</li>
+          <li data-index="2">リストの新規登録</li>
+          <li data-index="3">リストの編集・削除</li>
+        </ul>
+      </div>
+      <div class="main__contents disp--none">
+        <div class="main__contents__select--settings">
+          <h3>質問の音声</h3>
+          <select name="" id="" class="js-settingsVoice">
+            <option value="en-GB">英語（イギリス）</option>
+            <option value="en-US">英語（アメリカ）</option>
+            <option value="en-AU">英語（オーストラリア）</option>
+            <option value="en-CA">英語（カナダ）</option>
+            <option value="en-IN">英語（インド）</option>
+          </select>
+        </div>
+        <div class="main__contents__select--settings">
+          <h3>回答例の音声</h3>
+          <select name="" id="" class="js-settingsVoice">
+            <option value="en-GB">英語（イギリス）</option>
+            <option value="en-US">英語（アメリカ）</option>
+            <option value="en-AU">英語（オーストラリア）</option>
+            <option value="en-CA">英語（カナダ）</option>
+            <option value="en-IN">英語（インド）</option>
+          </select>
+        </div>
+        <div class="main__contents__btn--center">
+          <button class="js-settingsVoiceBtn">設定する</button>
+        </div>
+      </div>
+      <div class="main__contents disp--none">
+        <div class="main__contents__categoryName js-categoryNameSettingArea"></div>
+        <div class="main__contents__btn--center js-categoryNameSettingBtn">
+          <button>カテゴリを追加する</button>
+          <button disabled>保存する</button>
+        </div>
+      </div>
+      <div class="main__contents disp--none">
+        <div class="main__contents__listTitle">
+          <h3>リスト名</h3>
+          <input type="text" name="" id="">  
+        </div>
+        <ol class="main__contents__orderedList">
+          <li>
+            <div>Hi!</div>
+            <button>削除</button>
+          </li>
+          <li>
+            <div>英文の質問が入ります。</div>
+            <button>削除</button>
+          </li>
+          <li>
+            <div>英文の質問が入ります。</div>
+            <button>削除</button>
+          </li>
+          <li>
+            <div>英文の質問が入ります。</div>
+            <button>削除</button>
+          </li>
+          <li>
+            <div>英文の質問が入ります。</div>
+            <button>削除</button>
+          </li>
+        </ol>
+        <div class="main__contents__btn--center">
+          <button>質問を追加する</button>
+        </div>
+      </div>
+      <div class="main__contents disp--none">
+        <ul class="main__contents__list"></ul>
+      </div>
+    </section>
+  </main>
+  <script src="./dest/js/index.js"></script>
+</body>
+</html>
