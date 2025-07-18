@@ -15,3 +15,10 @@ export function getData() {
   }
   return data;
 }
+
+import { settingsTitleArray } from "../config/titleData";
+export const getTitleData = () => {
+  const path: string = location.pathname.split("/")[2];
+  const titleData = settingsTitleArray.filter((val) => val.link === path);
+  return titleData[0];
+};

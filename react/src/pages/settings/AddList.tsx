@@ -1,3 +1,9 @@
+import HeaderSettings from "../../components/HeaderSettings";
+
 export default function AddList() {
-  return <p>AddList</p>;
+  return (
+    <>
+      <HeaderSettings />
+    </>
+  );
 }

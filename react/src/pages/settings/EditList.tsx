@@ -1,3 +1,9 @@
+import HeaderSettings from "../../components/HeaderSettings";
+
 export default function EditList() {
-  return <p>EditList</p>;
+  return (
+    <>
+      <HeaderSettings />
+    </>
+  );
 }
