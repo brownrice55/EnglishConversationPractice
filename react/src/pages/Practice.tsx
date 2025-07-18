@@ -7,7 +7,7 @@ export default function Practice() {
       <Header
         title="練習"
         description="練習のページです"
-        keywords="英語,英語 勉強"
+        keywords="英語,英会話"
       />
       <Nav fill variant="tabs" defaultActiveKey="/" className="mt-3">
         <Nav.Item>

@@ -6,10 +6,10 @@ export default function Add() {
     <>
       <Header
         title="新規登録"
-        description="練習のページです"
-        keywords="英語,英語 勉強"
+        description="新規登録のページです"
+        keywords="英語,英会話"
       />
-      <FormForAddAndEdit />
+      <FormForAddAndEdit keyNumber={0} isEditing={false} onUpdate={() => {}} />
     </>
   );
 }

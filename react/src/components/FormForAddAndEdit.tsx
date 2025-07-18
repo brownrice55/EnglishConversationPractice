@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import type { SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import Form from "react-bootstrap/Form";
@@ -6,18 +6,37 @@ import Button from "react-bootstrap/Button";
 import type { Inputs } from "../types/inputs.type";
 import { getData } from "../utils/common";
 
-export default function FormForAddAndEdit() {
+type FormForAddAndEditProps = {
+  keyNumber: number;
+  isEditing?: boolean;
+  onUpdate?: (value: boolean) => void;
+};
+
+export default function FormForAddAndEdit({
+  keyNumber,
+  isEditing,
+  onUpdate,
+}: FormForAddAndEditProps) {
   const originalData = getData();
   const [data, setData] = useState<Map<number, Inputs>>(originalData);
+  let selectedData: Inputs | undefined;
+  if (keyNumber) {
+    selectedData = data.get(keyNumber);
+  }
 
   const defaultValues = {
     question: "",
-    answer: [],
-    category: [],
+    answer: "",
+    category: 0,
+    answers: [{ answer: "" }],
   };
 
   const keysArray: number[] = data.size ? Array.from(data.keys()) : [];
-  let nextId: number = data.size ? keysArray[keysArray.length - 1] : 0;
+  let nextId: number = keyNumber
+    ? keyNumber
+    : data.size
+    ? keysArray[keysArray.length - 1]
+    : 0;
 
   const {
     register,
@@ -36,21 +55,54 @@ export default function FormForAddAndEdit() {
   });
 
   const onsubmit: SubmitHandler<Inputs> = (values) => {
-    ++nextId;
+    if (!keyNumber) {
+      ++nextId;
+    }
     data.set(nextId, values);
     localStorage.setItem(
       "EnglishConversationPractice",
       JSON.stringify([...data])
     );
     setData(data);
-    reset();
+
+    if (keyNumber && onUpdate) {
+      onUpdate(!isEditing);
+    } else {
+      reset();
+    }
   };
 
   const onerror: SubmitErrorHandler<Inputs> = (err) => console.log(err);
 
   const handleCancel = () => {
-    reset();
+    if (keyNumber && onUpdate) {
+      onUpdate(!isEditing);
+    } else {
+      reset();
+    }
   };
+
+  useEffect(() => {
+    if (keyNumber) {
+      const selectedData = data.get(keyNumber);
+      if (selectedData) {
+        reset(selectedData);
+      }
+    } else {
+      reset({
+        question: "",
+        answer: "",
+        category: 0,
+        answers: [{ answer: "" }],
+      });
+    }
+  }, [keyNumber, selectedData, reset]);
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
 
   return (
     <Form onSubmit={handleSubmit(onsubmit, onerror)} noValidate>
