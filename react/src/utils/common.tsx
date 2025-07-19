@@ -17,11 +17,11 @@ export function getData() {
 }
 
 import { settingsTitleArray } from "../config/titleData";
-export const getTitleData = () => {
+export function getTitleData() {
   const path: string = location.pathname.split("/")[2];
   const titleData = settingsTitleArray.filter((val) => val.link === path);
   return titleData[0];
-};
+}
 
 import type { InputsCategory } from "../types/inputsCategory.type";
 export function getCategories(): InputsCategory {
@@ -30,4 +30,10 @@ export function getCategories(): InputsCategory {
     ? JSON.parse(raw)
     : [{ category: "" }];
   return { categories: data };
+}
+
+export function getAudio() {
+  const raw = localStorage.getItem("EnglishConversationPracticeAudio");
+  const data: string[] = raw ? JSON.parse(raw) : ["en-GB", "en-GB"];
+  return data;
 }
