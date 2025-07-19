@@ -22,3 +22,12 @@ export const getTitleData = () => {
   const titleData = settingsTitleArray.filter((val) => val.link === path);
   return titleData[0];
 };
+
+import type { InputsCategory } from "../types/inputsCategory.type";
+export function getCategories(): InputsCategory {
+  const raw = localStorage.getItem("EnglishConversationPracticeCategory");
+  const data: { category: string }[] = raw
+    ? JSON.parse(raw)
+    : [{ category: "" }];
+  return { categories: data };
+}
