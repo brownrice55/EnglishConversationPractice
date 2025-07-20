@@ -120,7 +120,7 @@ export default function FormForAddAndEdit({
       </Form.Group>
 
       <Form.Group className="mb-3">
-        <Form.Label htmlFor="answer">解答例（英語）</Form.Label>
+        <Form.Label htmlFor="answer">回答例（英語）</Form.Label>
         <Form.Control
           id="answer"
           as="textarea"
@@ -134,7 +134,7 @@ export default function FormForAddAndEdit({
       {fields.map((field: any, index: number) => (
         <Form.Group className="mb-3" key={field.id}>
           <Form.Label htmlFor={`answer${index + 2}`}>
-            解答例{index + 2}（英語）
+            回答例{index + 2}（英語）
           </Form.Label>
           <Form.Control
             id={`answer${index + 2}`}

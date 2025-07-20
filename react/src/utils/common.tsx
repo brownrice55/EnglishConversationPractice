@@ -16,6 +16,16 @@ export function getData() {
   return data;
 }
 
+export function getRandomIndexArray(aData: Map<number, Inputs>) {
+  const data = aData;
+  const array = Array.from(data.keys());
+  for (let cnt = array.length - 1; cnt > 0; --cnt) {
+    const random = Math.floor(Math.random() * (cnt + 1));
+    [array[cnt], array[random]] = [array[random], array[cnt]];
+  }
+  return array;
+}
+
 import { settingsTitleArray } from "../config/titleData";
 export function getTitleData() {
   const path: string = location.pathname.split("/")[2];
