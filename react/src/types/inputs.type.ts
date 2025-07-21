@@ -3,4 +3,5 @@ export type Inputs = {
   answer: string;
   category: number;
   answers: { answer: string }[];
+  isOnceAgain: boolean;
 };

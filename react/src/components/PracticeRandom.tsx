@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Inputs } from "../types/inputs.type";
 import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
@@ -11,21 +11,28 @@ type PracticeRandomProps = {
   data: Map<number, Inputs>;
   randomIndexArray: number[];
   lang: string[];
+  title: string;
+  onUpdate?: (data: Map<number, Inputs>) => void;
 };
 export default function PracticeRandom({
   data,
   randomIndexArray,
   lang,
+  title,
+  onUpdate,
 }: PracticeRandomProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const currentKey: number = randomIndexArray[currentIndex];
   const displayData: Inputs | undefined = data.get(currentKey);
+
   const answersLength: number =
     displayData && displayData.answers ? displayData.answers.length : 0;
-
   const [displayAnswer, setDisplayAnswer] = useState<boolean>(false);
   const [volumeIconsOn, setVolumeIconsOn] = useState<boolean[]>(
     Array(answersLength).fill(false)
+  );
+  const [variant, setVariant] = useState<string>(
+    displayData && displayData.isOnceAgain ? "light" : "secondary"
   );
 
   const handleDisplayAnswer = () => {
@@ -37,6 +44,7 @@ export default function PracticeRandom({
     setCurrentIndex((prev) =>
       prev === randomIndexArray.length - 1 ? 0 : prev + 1
     );
+    setVariant(displayData?.isOnceAgain ? "light" : "secondary");
   };
 
   const handleAudioOnOff = (e: any) => {
@@ -69,35 +77,62 @@ export default function PracticeRandom({
     }
   };
 
+  const handleOnceAgain = () => {
+    const newData = {
+      ...(displayData as Inputs),
+      isOnceAgain: !(displayData as Inputs).isOnceAgain,
+    };
+    newData.isOnceAgain = !newData.isOnceAgain;
+    data.set(currentKey, newData);
+    if (onUpdate) {
+      onUpdate(data);
+    }
+    localStorage.setItem(
+      "EnglishConversationPractice",
+      JSON.stringify([...data])
+    );
+    setVariant(newData.isOnceAgain ? "light" : "secondary");
+  };
+
+  useEffect(() => {
+    setVariant(displayData?.isOnceAgain ? "light" : "secondary");
+  }, [displayData]);
+
   return (
     <>
       <Stack gap={3}>
-        <Row className="mt-4">
-          <Col>
-            <Form.Group>
-              <Form.Select aria-label="category">
-                <option value="1">全ての会話</option>
-                <option value="2">仕事</option>
-                <option value="3">趣味</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-          <Col className="text-end">
-            <Button variant="secondary" className="py-2 px-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                fill="currentColor"
-                className="bi bi-paperclip"
-                viewBox="0 0 16 16"
+        {title === "random" && (
+          <Row className="mt-4">
+            <Col>
+              <Form.Group>
+                <Form.Select aria-label="category">
+                  <option value="1">全ての会話</option>
+                  <option value="2">仕事</option>
+                  <option value="3">趣味</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
+            <Col className="text-end">
+              <Button
+                variant={variant}
+                className="py-2 px-3"
+                onClick={handleOnceAgain}
               >
-                <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z" />
-              </svg>
-              もう一度
-            </Button>
-          </Col>
-        </Row>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  fill="currentColor"
+                  className="bi bi-paperclip"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z" />
+                </svg>
+                {variant == "light" ? "クリップを外す" : "もう一度"}
+              </Button>
+            </Col>
+          </Row>
+        )}
 
         <div className="mt-5 p-3 fs-3 fw-light">
           <span className="pe-2">
@@ -129,7 +164,9 @@ export default function PracticeRandom({
             <Button
               variant="primary"
               className="py-3 px-5"
-              onClick={handleDisplayAnswer}
+              onClick={() => {
+                handleDisplayAnswer();
+              }}
             >
               回答例を見る
             </Button>
@@ -166,9 +203,9 @@ export default function PracticeRandom({
               </div>
 
               {displayData?.answers.map((val, index) => (
-                <>
+                <div key={title + (index + 2)}>
                   {val.answer && (
-                    <div className="p-2 fs-3 fw-light" key={index + 2}>
+                    <div className="p-2 fs-3 fw-light">
                       <p className="fs-6 m-0">回答例{index + 2}</p>
                       <span className="pe-2">
                         <svg
@@ -197,7 +234,7 @@ export default function PracticeRandom({
                       </Button>
                     </div>
                   )}
-                </>
+                </div>
               ))}
             </div>
 

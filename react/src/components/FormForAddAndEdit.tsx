@@ -29,6 +29,7 @@ export default function FormForAddAndEdit({
     answer: "",
     category: 0,
     answers: [{ answer: "" }],
+    isOnceAgain: false,
   };
 
   const keysArray: number[] = data.size ? Array.from(data.keys()) : [];
@@ -160,6 +161,15 @@ export default function FormForAddAndEdit({
           <option value="1">仕事</option>
           <option value="2">趣味</option>
         </Form.Select>
+      </Form.Group>
+
+      <Form.Group className="d-none">
+        <Form.Check
+          inline
+          id="isOnceAgain"
+          label="もう一度"
+          {...register("isOnceAgain")}
+        />
       </Form.Group>
 
       <div className="text-center">
