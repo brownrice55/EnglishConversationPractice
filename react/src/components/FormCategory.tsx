@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import type { SubmitHandler, SubmitErrorHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -31,6 +32,8 @@ export default function FormCategory() {
     keyName: "id",
   });
 
+  const navigate = useNavigate();
+
   const onsubmit: SubmitHandler<InputsCategory> = (values) => {
     const inputData = values.categories
       .filter((val) => val.category)
@@ -40,6 +43,7 @@ export default function FormCategory() {
       JSON.stringify(inputData)
     );
     setCategoryData({ categories: inputData });
+    navigate("/settings");
   };
 
   const onerror: SubmitErrorHandler<InputsCategory> = (err) => console.log(err);

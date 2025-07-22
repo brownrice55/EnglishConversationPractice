@@ -6,6 +6,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import VolumeIcons from "./VolumeIcons";
+import { getSelectedCategories } from "../utils/common";
 
 type PracticeRandomProps = {
   data: Map<number, Inputs>;
@@ -34,6 +35,8 @@ export default function PracticeRandom({
   const [variant, setVariant] = useState<string>(
     displayData && displayData.isOnceAgain ? "light" : "secondary"
   );
+
+  const selectedCategories = getSelectedCategories(data);
 
   const handleDisplayAnswer = () => {
     setDisplayAnswer((prev) => !prev);
@@ -82,7 +85,7 @@ export default function PracticeRandom({
       ...(displayData as Inputs),
       isOnceAgain: !(displayData as Inputs).isOnceAgain,
     };
-    newData.isOnceAgain = !newData.isOnceAgain;
+    newData.isOnceAgain = !displayData?.isOnceAgain;
     data.set(currentKey, newData);
     if (onUpdate) {
       onUpdate(data);
@@ -92,6 +95,11 @@ export default function PracticeRandom({
       JSON.stringify([...data])
     );
     setVariant(newData.isOnceAgain ? "light" : "secondary");
+  };
+
+  const handleSelectCategory = (e: any) => {
+    const targetValue = parseInt(e.target.value);
+    console.log(targetValue);
   };
 
   useEffect(() => {
@@ -105,10 +113,16 @@ export default function PracticeRandom({
           <Row className="mt-4">
             <Col>
               <Form.Group>
-                <Form.Select aria-label="category">
-                  <option value="1">全ての会話</option>
-                  <option value="2">仕事</option>
-                  <option value="3">趣味</option>
+                <Form.Select
+                  aria-label="category"
+                  onChange={handleSelectCategory}
+                >
+                  <option value="100000">全ての会話</option>
+                  {selectedCategories.map((val) => (
+                    <option value={val.categoryId} key={val.categoryId}>
+                      {val.category}
+                    </option>
+                  ))}
                 </Form.Select>
               </Form.Group>
             </Col>

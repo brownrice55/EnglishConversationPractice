@@ -47,3 +47,15 @@ export function getAudio() {
   const data: string[] = raw ? JSON.parse(raw) : ["en-GB", "en-GB"];
   return data;
 }
+
+export function getSelectedCategories(aData: Map<number, Inputs>) {
+  const originalCategories: InputsCategory = getCategories();
+  const originalData: Map<number, Inputs> = aData;
+  const categoryIdsInData =
+    originalData &&
+    [...originalData.values()].map((val) => val.category).map(Number);
+  const selectedCategories = originalCategories.categories.filter((val) =>
+    categoryIdsInData.includes(val.categoryId)
+  );
+  return selectedCategories;
+}

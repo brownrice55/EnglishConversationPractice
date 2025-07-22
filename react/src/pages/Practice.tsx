@@ -8,7 +8,6 @@ import type { Inputs } from "../types/inputs.type";
 
 export default function Practice() {
   const originalData = getData();
-  console.log(originalData);
   const [data, setData] = useState<Map<number, Inputs>>(originalData);
   const randomIndexArray = useMemo(() => getRandomIndexArray(data), []);
   const [filteredData, setFilteredData] = useState<Map<number, Inputs>>(

@@ -4,7 +4,7 @@ import type { SubmitHandler, SubmitErrorHandler } from "react-hook-form";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import type { Inputs } from "../types/inputs.type";
-import { getData } from "../utils/common";
+import { getData, getSelectedCategories } from "../utils/common";
 
 type FormForAddAndEditProps = {
   keyNumber: number;
@@ -23,6 +23,8 @@ export default function FormForAddAndEdit({
   if (keyNumber) {
     selectedData = data.get(keyNumber);
   }
+
+  const selectedCategories = getSelectedCategories(originalData);
 
   const defaultValues = {
     question: "",
@@ -158,8 +160,12 @@ export default function FormForAddAndEdit({
 
       <Form.Group className="my-5">
         <Form.Select aria-label="category" {...register("category")}>
-          <option value="1">仕事</option>
-          <option value="2">趣味</option>
+          {selectedCategories?.map((val) => (
+            <option value={val.categoryId} key={val.categoryId}>
+              {val.category}
+            </option>
+          ))}
+          <option value="1000000">選択しない</option>
         </Form.Select>
       </Form.Group>
 
