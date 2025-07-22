@@ -36,9 +36,9 @@ export function getTitleData() {
 import type { InputsCategory } from "../types/inputsCategory.type";
 export function getCategories(): InputsCategory {
   const raw = localStorage.getItem("EnglishConversationPracticeCategory");
-  const data: { category: string }[] = raw
+  const data: { category: string; categoryId: number }[] = raw
     ? JSON.parse(raw)
-    : [{ category: "" }];
+    : [{ category: "", categoryId: 0 }];
   return { categories: data };
 }
 

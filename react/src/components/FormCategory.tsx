@@ -18,6 +18,7 @@ export default function FormCategory() {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<InputsCategory>({
     defaultValues,
@@ -27,10 +28,13 @@ export default function FormCategory() {
   const { fields, append, remove } = useFieldArray<InputsCategory>({
     control,
     name: "categories",
+    keyName: "id",
   });
 
   const onsubmit: SubmitHandler<InputsCategory> = (values) => {
-    const inputData = values.categories.filter((val) => val.category);
+    const inputData = values.categories
+      .filter((val) => val.category)
+      .map((val) => ({ ...val, categoryId: val.categoryId }));
     localStorage.setItem(
       "EnglishConversationPracticeCategory",
       JSON.stringify(inputData)
@@ -40,47 +44,72 @@ export default function FormCategory() {
 
   const onerror: SubmitErrorHandler<InputsCategory> = (err) => console.log(err);
 
+  const handleCancel = () => {
+    reset();
+  };
+
+  const handleAddField = () => {
+    const lastId = categoryData.categories.length
+      ? Math.max(...categoryData.categories.map((val) => val.categoryId || 0))
+      : 0;
+    const nextId = lastId + 1;
+    append({ categoryId: nextId, category: "" });
+  };
+
   return (
     <>
       <p>カテゴリ名を登録</p>
       <Form onSubmit={handleSubmit(onsubmit, onerror)} noValidate>
         {fields.map((field: any, index: number) => (
-          <Form.Group className="my-4" key={field.id}>
+          <Form.Group className="my-4" key={index}>
             <Row>
               <Col>
                 <Form.Control
-                  id={`category${index + 2}`}
+                  id={`category${index}`}
                   as="input"
                   {...register(`categories.${index}.category`)}
+                  defaultValue={field.category}
+                />
+                <Form.Control
+                  type="hidden"
+                  {...register(`categories.${index}.categoryId`, {
+                    valueAsNumber: true,
+                  })}
+                  value={field.categoryId ?? 0}
                 />
                 <div className="text-danger pt-2">
                   {!index && errors.categories?.[index]?.category?.message}
                 </div>
               </Col>
               <Col>
-                {index ? (
-                  <Button
-                    variant="primary"
-                    className="py-1 px-2"
-                    onClick={() => remove(index)}
-                  >
-                    削除
-                  </Button>
-                ) : (
-                  ""
-                )}
+                <Button
+                  variant="primary"
+                  className="py-1 px-2"
+                  onClick={() => remove(index)}
+                >
+                  削除
+                </Button>
               </Col>
             </Row>
           </Form.Group>
         ))}
 
+        <div className="text-end">
+          <Button
+            variant="primary"
+            className="py-2 px-4 me-3"
+            onClick={handleAddField}
+          >
+            カテゴリ名を追加する
+          </Button>
+        </div>
         <div className="text-center mt-5">
           <Button
             variant="primary"
             className="py-3 px-5 me-3"
-            onClick={() => append({ category: "" })}
+            onClick={handleCancel}
           >
-            カテゴリ名を追加する
+            キャンセルする
           </Button>
           <Button variant="primary" type="submit" className="py-3 px-5">
             保存する
