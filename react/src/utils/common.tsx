@@ -5,13 +5,18 @@ export function getData() {
     "EnglishConversationPractice"
   );
   if (dataFromLocalStorage !== "undefined") {
-    let dataJson: any;
     if (typeof dataFromLocalStorage === "string") {
-      dataJson = JSON.parse(dataFromLocalStorage);
+      const dataJson = JSON.parse(dataFromLocalStorage);
+      const dataJsonTypeChanged = dataJson.map(
+        ([key, val]: [number, Inputs]) => [
+          key,
+          { ...val, category: Number(val.category) },
+        ]
+      );
+      data = new Map(dataJsonTypeChanged);
     } else {
-      dataJson = null;
+      data = new Map(null);
     }
-    data = new Map(dataJson);
   }
   return data;
 }

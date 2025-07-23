@@ -6,7 +6,7 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import VolumeIcons from "./VolumeIcons";
-import { getSelectedCategories } from "../utils/common";
+import { getSelectedCategories, getRandomIndexArray } from "../utils/common";
 
 type PracticeRandomProps = {
   data: Map<number, Inputs>;
@@ -22,9 +22,11 @@ export default function PracticeRandom({
   title,
   onUpdate,
 }: PracticeRandomProps) {
+  const [allData, setAllData] = useState<Map<number, Inputs>>(data);
+  const [indexArray, setIndexArray] = useState<number[]>(randomIndexArray);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const currentKey: number = randomIndexArray[currentIndex];
-  const displayData: Inputs | undefined = data.get(currentKey);
+  const currentKey: number = indexArray[currentIndex];
+  const displayData: Inputs | undefined = allData.get(currentKey);
 
   const answersLength: number =
     displayData && displayData.answers ? displayData.answers.length : 0;
@@ -44,9 +46,7 @@ export default function PracticeRandom({
 
   const handleDisplayNextQuestion = () => {
     setDisplayAnswer((prev) => !prev);
-    setCurrentIndex((prev) =>
-      prev === randomIndexArray.length - 1 ? 0 : prev + 1
-    );
+    setCurrentIndex((prev) => (prev === indexArray.length - 1 ? 0 : prev + 1));
     setVariant(displayData?.isOnceAgain ? "light" : "secondary");
   };
 
@@ -99,7 +99,16 @@ export default function PracticeRandom({
 
   const handleSelectCategory = (e: any) => {
     const targetValue = parseInt(e.target.value);
-    console.log(targetValue);
+    let newData = new Map(data);
+    if (targetValue !== 100000) {
+      newData = new Map(
+        [...data].filter(([, val]) => val.category === targetValue)
+      );
+    }
+    setAllData(newData);
+    const newRandomIndexArray = getRandomIndexArray(newData);
+    setIndexArray(newRandomIndexArray);
+    setCurrentIndex(0);
   };
 
   useEffect(() => {
