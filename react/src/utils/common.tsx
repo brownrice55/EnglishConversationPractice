@@ -64,3 +64,19 @@ export function getSelectedCategories(aData: Map<number, Inputs>) {
   );
   return selectedCategories;
 }
+
+export function getListData() {
+  let data = new Map<number, Inputs>();
+  const dataFromLocalStorage: string | null = localStorage.getItem(
+    "EnglishConversationPracticeList"
+  );
+  if (dataFromLocalStorage !== "undefined") {
+    if (typeof dataFromLocalStorage === "string") {
+      const dataJson = JSON.parse(dataFromLocalStorage);
+      data = new Map(dataJson);
+    } else {
+      data = new Map(null);
+    }
+  }
+  return data;
+}
