@@ -6,32 +6,36 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Form from "react-bootstrap/Form";
-import type { InputsList } from "../types/InputsList.type";
+import type { InputsList } from "../types/inputsList.type";
 import ModalList from "./ModalList";
 import { getData, getListData } from "../utils/common";
 
 type FormAddListProps = {
   keyNumber: number;
+  onUpdate?: (isEditing: boolean) => void;
 };
 
-export default function FormAddList({ keyNumber }: FormAddListProps) {
-  const [questionArray, setQuestionArray] = useState<(string | undefined)[]>(
-    []
-  );
-  const [questionKeyArray, setQuestionKeyArray] = useState<number[]>([]);
-  const storeData = getListData();
+export default function FormAddList({ keyNumber, onUpdate }: FormAddListProps) {
+  const listData = getListData();
   const originalData = getData();
+  const currentValues = keyNumber
+    ? listData.get(keyNumber)
+    : { listname: "", questionArray: [], questionKeyArray: [] };
+  const [questionArray, setQuestionArray] = useState<(string | undefined)[]>(
+    keyNumber ? currentValues?.questionArray ?? [] : []
+  );
+  const [questionKeyArray, setQuestionKeyArray] = useState<number[]>(
+    keyNumber ? currentValues?.questionKeyArray ?? [] : []
+  );
 
-  const keysArray: number[] = storeData.size
-    ? Array.from(storeData.keys())
-    : [];
+  const keysArray: number[] = listData.size ? Array.from(listData.keys()) : [];
   let nextId: number = keyNumber
     ? keyNumber
-    : storeData.size
+    : listData.size
     ? keysArray[keysArray.length - 1]
     : 0;
 
-  const defaultValues = {};
+  const defaultValues = keyNumber ? listData.get(keyNumber) : {};
 
   const handleUpdate = (key: number, listId: number, action: string) => {
     const newQuestionArray = [...questionArray];
@@ -62,15 +66,20 @@ export default function FormAddList({ keyNumber }: FormAddListProps) {
       ++nextId;
     }
     const questionKeyData = questionKeyArray.filter((val) => val);
-    values.questionKeys = questionKeyData;
-    storeData.set(nextId, values);
+    const questionData = questionArray.filter((val) => val);
+    values.questionKeyArray = questionKeyData;
+    values.questionArray = questionData;
+    listData.set(nextId, values);
     localStorage.setItem(
       "EnglishConversationPracticeList",
-      JSON.stringify([...storeData])
+      JSON.stringify([...listData])
     );
     setQuestionArray([]);
     setQuestionKeyArray([]);
     reset();
+    if (keyNumber && onUpdate) {
+      onUpdate(false);
+    }
   };
 
   const onerror: SubmitErrorHandler<InputsList> = (err) => console.log(err);

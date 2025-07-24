@@ -65,8 +65,9 @@ export function getSelectedCategories(aData: Map<number, Inputs>) {
   return selectedCategories;
 }
 
+import type { InputsList } from "../types/inputsList.type";
 export function getListData() {
-  let data = new Map<number, Inputs>();
+  let data = new Map<number, InputsList>();
   const dataFromLocalStorage: string | null = localStorage.getItem(
     "EnglishConversationPracticeList"
   );
