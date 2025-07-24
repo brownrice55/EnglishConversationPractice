@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 import Header from "./Header";
-import FormForAddAndEdit from "./FormForAddAndEdit";
+import FormAddAndEdit from "./FormAddAndEdit";
 import type { Inputs } from "../types/inputs.type";
 import { getData } from "../utils/common";
 
@@ -62,7 +62,7 @@ export default function Edit() {
           ))}
         </ListGroup>
       ) : (
-        <FormForAddAndEdit
+        <FormAddAndEdit
           keyNumber={keyNumber}
           isEditing={true}
           onUpdate={handleUpdate}

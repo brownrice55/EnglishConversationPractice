@@ -10,12 +10,15 @@ import type { InputsList } from "../types/inputsList.type";
 import ModalList from "./ModalList";
 import { getData, getListData } from "../utils/common";
 
-type FormAddListProps = {
+type FormAddAndEditListProps = {
   keyNumber: number;
   onUpdate?: (isEditing: boolean) => void;
 };
 
-export default function FormAddList({ keyNumber, onUpdate }: FormAddListProps) {
+export default function FormAddAndEditList({
+  keyNumber,
+  onUpdate,
+}: FormAddAndEditListProps) {
   const listData = getListData();
   const originalData = getData();
   const currentValues = keyNumber

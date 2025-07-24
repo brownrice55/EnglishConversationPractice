@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 import HeaderSettings from "../../components/HeaderSettings";
-import FormAddList from "../../components/FormAddList";
+import FormAddAndEditList from "../../components/FormAddAndEditList";
 import type { InputsList } from "../../types/inputsList.type";
 import { getListData } from "../../utils/common";
 
@@ -58,7 +58,7 @@ export default function EditList() {
           ))}
         </ListGroup>
       ) : (
-        <FormAddList keyNumber={keyNumber} onUpdate={handleUpdate} />
+        <FormAddAndEditList keyNumber={keyNumber} onUpdate={handleUpdate} />
       )}
     </>
   );

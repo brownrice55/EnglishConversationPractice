@@ -6,17 +6,17 @@ import Button from "react-bootstrap/Button";
 import type { Inputs } from "../types/inputs.type";
 import { getData, getSelectedCategories } from "../utils/common";
 
-type FormForAddAndEditProps = {
+type FormAddAndEditProps = {
   keyNumber: number;
   isEditing?: boolean;
   onUpdate?: (value: boolean) => void;
 };
 
-export default function FormForAddAndEdit({
+export default function FormAddAndEdit({
   keyNumber,
   isEditing,
   onUpdate,
-}: FormForAddAndEditProps) {
+}: FormAddAndEditProps) {
   const originalData = getData();
   const [data, setData] = useState<Map<number, Inputs>>(originalData);
   let selectedData: Inputs | undefined;

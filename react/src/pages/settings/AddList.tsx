@@ -1,11 +1,11 @@
 import HeaderSettings from "../../components/HeaderSettings";
-import FormAddList from "../../components/FormAddList";
+import FormAddAndEditList from "../../components/FormAddAndEditList";
 
 export default function AddList() {
   return (
     <>
       <HeaderSettings />
-      <FormAddList keyNumber={0} />
+      <FormAddAndEditList keyNumber={0} />
     </>
   );
 }

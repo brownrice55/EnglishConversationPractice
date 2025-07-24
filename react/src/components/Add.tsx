@@ -1,4 +1,4 @@
-import FormForAddAndEdit from "./FormForAddAndEdit";
+import FormAddAndEdit from "./FormAddAndEdit";
 import Header from "./Header";
 
 export default function Add() {
@@ -9,7 +9,7 @@ export default function Add() {
         description="新規登録のページです"
         keywords="英語,英会話"
       />
-      <FormForAddAndEdit keyNumber={0} isEditing={false} onUpdate={() => {}} />
+      <FormAddAndEdit keyNumber={0} isEditing={false} onUpdate={() => {}} />
     </>
   );
 }
