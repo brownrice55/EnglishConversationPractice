@@ -3,11 +3,18 @@ import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Header from "../components/Header";
 import PracticeRandom from "../components/PracticeRandom";
-import { getData, getRandomIndexArray, getAudio } from "../utils/common";
+import PracticeList from "../components/PracticeList";
+import {
+  getData,
+  getRandomIndexArray,
+  getAudio,
+  getListData,
+} from "../utils/common";
 import type { Inputs } from "../types/inputs.type";
 
 export default function Practice() {
   const originalData = getData();
+  const originalListData = getListData();
   const [data, setData] = useState<Map<number, Inputs>>(originalData);
   const randomIndexArray = useMemo(() => getRandomIndexArray(data), []);
   const [filteredData, setFilteredData] = useState<Map<number, Inputs>>(
@@ -63,9 +70,13 @@ export default function Practice() {
         ) : (
           ""
         )}
-        <Tab eventKey="list" title="リスト">
-          リスト
-        </Tab>
+        {originalListData.size ? (
+          <Tab eventKey="list" title="リスト">
+            <PracticeList />
+          </Tab>
+        ) : (
+          ""
+        )}
       </Tabs>
     </>
   );
