@@ -6,6 +6,16 @@ type DataType = {
 
 export const settingsTitleArray: DataType[] = [
   {
+    title: "会話の新規登録",
+    description: "会話の新規登録のページです",
+    link: "add",
+  },
+  {
+    title: "会話の編集・削除",
+    description: "会話の編集・削除のページです",
+    link: "edit",
+  },
+  {
     title: "音声設定",
     description: "設定のページです",
     link: "audio",

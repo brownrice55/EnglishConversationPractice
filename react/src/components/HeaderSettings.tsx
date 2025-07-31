@@ -15,6 +15,7 @@ export default function HeaderSettings() {
         <Breadcrumb.Item href="/settings">設定</Breadcrumb.Item>
         <Breadcrumb.Item active>{titleData.title}</Breadcrumb.Item>
       </Breadcrumb>
+      <h1 className="lead py-2">{titleData.title}</h1>
     </>
   );
 }

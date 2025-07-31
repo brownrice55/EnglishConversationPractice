@@ -5,7 +5,6 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { useNavigate } from "react-router-dom";
 
-import Header from "./Header";
 import FormAddAndEdit from "./FormAddAndEdit";
 import type { Inputs } from "../types/inputs.type";
 import { getData } from "../utils/common";
@@ -59,11 +58,6 @@ export default function Edit() {
 
   return (
     <>
-      <Header
-        title="編集・削除"
-        description="編集・削除のページです"
-        keywords="英語,英会話"
-      />
       {!isEditing ? (
         <ListGroup>
           {[...data].map(([key, val]) => (

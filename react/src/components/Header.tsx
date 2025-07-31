@@ -14,7 +14,11 @@ export default function Header({ title, description, keywords }: HeaderProps) {
         <meta name="description" content={description} />
         <meta name="keywords" content={keywords} />
       </Helmet>
-      <h1 className="lead py-2">{title}</h1>
+      {title === "練習" || title === "設定" ? (
+        <h1 className="lead py-2">{title}</h1>
+      ) : (
+        ""
+      )}
     </>
   );
 }
