@@ -125,6 +125,7 @@ export default function PracticeRandom({
                 <Form.Select
                   aria-label="category"
                   onChange={handleSelectCategory}
+                  id="category"
                 >
                   <option value="100000">全ての会話</option>
                   {selectedCategories.map((val) => (

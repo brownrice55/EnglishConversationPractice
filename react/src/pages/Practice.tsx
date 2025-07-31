@@ -39,7 +39,7 @@ export default function Practice() {
 
   useEffect(() => {
     if (!originalData.size) {
-      navigate("/add");
+      navigate("/settings/add");
     }
   }, [originalData.size]);
 

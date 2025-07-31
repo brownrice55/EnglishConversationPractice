@@ -34,7 +34,9 @@ export default function PracticeList() {
 
   const handleSelectList = (e: any) => {
     const targetKey = parseInt(e.target.value);
-    setCurrentData(originalListData.get(targetKey));
+    const newCurrentData = originalListData.get(targetKey);
+    setCurrentData(newCurrentData);
+    setCurrentQuestionIndex(0);
   };
 
   const handleDisplayAnswer = () => {
@@ -50,15 +52,14 @@ export default function PracticeList() {
 
   const handleAudioOnOff = (e: any) => {
     const index: number = parseInt(e.currentTarget.dataset.key);
-    console.log({ index });
     const newArray = Array(answersLength).fill(false);
     newArray[index] = !volumeIconsOn[index];
     setVolumeIconsOn(newArray);
     if (newArray[index]) {
       const text =
         index === 0
-          ? currentData?.questionArray[0]
-          : currentData?.answersArray[index - 1][0];
+          ? currentData?.questionArray[currentQuestionIndex]
+          : currentData?.answersArray[currentQuestionIndex][index - 1];
       const voice = new SpeechSynthesisUtterance(text);
       voice.lang = index === 0 ? lang[0] : lang[1];
       voice.rate = 0.5;
@@ -83,7 +84,11 @@ export default function PracticeList() {
         <Row className="mt-4">
           <Col>
             <Form.Group>
-              <Form.Select aria-label="category" onChange={handleSelectList}>
+              <Form.Select
+                aria-label="category"
+                onChange={handleSelectList}
+                id="categoryList"
+              >
                 {[...originalListData].map(([key, val]) => (
                   <option value={key} key={key}>
                     {val.listname}
@@ -158,10 +163,13 @@ export default function PracticeList() {
                     <Button
                       variant="light"
                       className="p-1 ms-2"
-                      data-key={1}
+                      data-key={index + 1}
                       onClick={(e) => handleAudioOnOff(e)}
                     >
-                      <VolumeIcons volumeIconsOn={volumeIconsOn} index={1} />
+                      <VolumeIcons
+                        volumeIconsOn={volumeIconsOn}
+                        index={index + 1}
+                      />
                     </Button>
                   </div>
                 </div>
