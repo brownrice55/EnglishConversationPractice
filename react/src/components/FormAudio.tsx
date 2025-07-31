@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FormAudioSelect from "./FormAudioSelect";
@@ -7,6 +7,7 @@ import { getAudio } from "../utils/common";
 export default function FormAudio() {
   const audio = getAudio();
   const [form, setForm] = useState<string[]>(audio);
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
   const handleSave = () => {
     localStorage.setItem(
@@ -22,6 +23,10 @@ export default function FormAudio() {
       setForm((prev) => [prev[0], value]);
     }
   };
+
+  useEffect(() => {
+    setIsDisabled(audio.toString() === form.toString());
+  }, [form]);
 
   return (
     <>
@@ -46,6 +51,7 @@ export default function FormAudio() {
             className="px-5 py-3 mx-3"
             variant="primary"
             onClick={handleSave}
+            disabled={isDisabled}
           >
             設定する
           </Button>

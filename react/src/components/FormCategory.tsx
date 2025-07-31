@@ -20,7 +20,7 @@ export default function FormCategory() {
     handleSubmit,
     control,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty, isValid },
   } = useForm<InputsCategory>({
     defaultValues,
     mode: "onChange",
@@ -115,7 +115,12 @@ export default function FormCategory() {
           >
             キャンセルする
           </Button>
-          <Button variant="primary" type="submit" className="py-3 px-5">
+          <Button
+            variant="primary"
+            type="submit"
+            className="py-3 px-5"
+            disabled={!isDirty || !isValid}
+          >
             保存する
           </Button>
         </div>

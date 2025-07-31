@@ -59,6 +59,8 @@ export default function FormAddAndEditList({
     keyNumber ? currentValues?.answersArray ?? [] : []
   );
 
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
   const keysArray: number[] = listData.size ? Array.from(listData.keys()) : [];
   let nextId: number = keyNumber
     ? keyNumber
@@ -97,12 +99,16 @@ export default function FormAddAndEditList({
   });
 
   const onsubmit: SubmitHandler<InputsList> = (values) => {
+    const answersData = answersArray.filter((val) => val[1]);
+    if (!answersData[0].length) {
+      setErrorMessage("1つ以上追加してください");
+      return;
+    }
     if (!keyNumber) {
       ++nextId;
     }
     const questionKeyData = questionKeyArray.filter((val) => val);
     const questionData = questionArray.filter((val) => val);
-    const answersData = answersArray.filter((val) => val);
     values.questionKeyArray = questionKeyData;
     values.questionArray = questionData;
     values.answersArray = answersData;
@@ -152,12 +158,19 @@ export default function FormAddAndEditList({
                   </Col>
                 </Row>
               ) : (
-                <ModalList
-                  listId={index}
-                  onUpdate={handleUpdate}
-                  data={originalData}
-                  isFirstTime={true}
-                />
+                <>
+                  <ModalList
+                    listId={index}
+                    onUpdate={handleUpdate}
+                    data={originalData}
+                    isFirstTime={true}
+                  />
+                  {!index ? (
+                    <span className="text-danger ms-3">{errorMessage}</span>
+                  ) : (
+                    ""
+                  )}
+                </>
               )}
             </ListGroup.Item>
           ))}
