@@ -224,8 +224,10 @@ export default function PracticeRandom({
                   <VolumeIcons volumeIconsOn={volumeIconsOn} index={1} />
                 </Button>
               </div>
+            </div>
 
-              {displayData?.answers.map((val, index) => (
+            {displayData?.answers.map((val, index) => (
+              <div className="px-3 py-1 bg-light">
                 <div key={title + (index + 2)}>
                   {val.answer && (
                     <div className="p-2 fs-3 fw-light">
@@ -258,8 +260,8 @@ export default function PracticeRandom({
                     </div>
                   )}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
 
             <div className="text-center">
               <Button

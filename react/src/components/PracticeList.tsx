@@ -138,7 +138,7 @@ export default function PracticeList() {
           <>
             {currentData?.answersArray[currentQuestionIndex].map(
               (val, index) => (
-                <div className="px-3 py-1 bg-light">
+                <div className="px-3 py-1 bg-light" key={index}>
                   <div className="p-2 fs-3 fw-light">
                     <p className="fs-6 m-0">回答例{index + 1}</p>
                     <span className="pe-2">

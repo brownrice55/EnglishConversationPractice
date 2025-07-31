@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Tab from "react-bootstrap/Tab";
 import Tabs from "react-bootstrap/Tabs";
 import Header from "../components/Header";
@@ -11,6 +11,7 @@ import {
   getListData,
 } from "../utils/common";
 import type { Inputs } from "../types/inputs.type";
+import { useNavigate } from "react-router-dom";
 
 export default function Practice() {
   const originalData = getData();
@@ -34,6 +35,13 @@ export default function Practice() {
     setFilteredData(updatedFilteredData);
     setFilteredRandomIndexArray(getRandomIndexArray(updatedFilteredData));
   };
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!originalData.size) {
+      navigate("/add");
+    }
+  }, [originalData.size]);
 
   return (
     <>

@@ -1,19 +1,34 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { useNavigate } from "react-router-dom";
 
 import Header from "./Header";
 import FormAddAndEdit from "./FormAddAndEdit";
 import type { Inputs } from "../types/inputs.type";
 import { getData } from "../utils/common";
+import { DoesDataExistContext } from "../contexts/context";
 
 export default function Edit() {
   const originalData = getData();
   const [data, setData] = useState<Map<number, Inputs>>(originalData);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [keyNumber, setKeyNumber] = useState<number>(0);
+  const navigate = useNavigate();
+
+  const context = useContext(DoesDataExistContext);
+  if (!context) {
+    throw new Error("error");
+  }
+  const { doesDataExist, setDoesDataExist } = context;
+
+  useEffect(() => {
+    if (!doesDataExist) {
+      navigate("/");
+    }
+  }, [setDoesDataExist]);
 
   const handleEdit = (aKey: number) => {
     setIsEditing(true);
@@ -28,6 +43,10 @@ export default function Edit() {
       JSON.stringify([...newData])
     );
     setData(newData);
+    if (!newData.size && setDoesDataExist) {
+      setDoesDataExist(0);
+      navigate("/");
+    }
   };
 
   const handleUpdate = (isEditing: boolean) => {
