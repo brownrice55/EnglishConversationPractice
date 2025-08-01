@@ -99,8 +99,8 @@ export default function FormAddAndEditList({
   });
 
   const onsubmit: SubmitHandler<InputsList> = (values) => {
-    const answersData = answersArray.filter((val) => val[1]);
-    if (!answersData[0].length) {
+    const answersData = answersArray.filter((val) => val);
+    if (!answersData.length || !answersData[0].length) {
       setErrorMessage("1つ以上追加してください");
       return;
     }

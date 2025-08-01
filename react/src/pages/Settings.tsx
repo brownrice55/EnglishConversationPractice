@@ -27,7 +27,8 @@ export default function Settings() {
         {settingsTitleArray.map((val, index) => (
           <Col key={index}>
             {(val.link == "edit" && !doesDataExist) ||
-            (val.link == "editList" && !originalListData.size) ? (
+            (val.link == "editList" && !originalListData.size) ||
+            (val.link == "addList" && !doesDataExist) ? (
               ""
             ) : (
               <Link
