@@ -1,0 +1,196 @@
+import { useState, useEffect } from "react";
+import { useForm, useFieldArray } from "react-hook-form";
+import type { SubmitHandler, SubmitErrorHandler } from "react-hook-form";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import type { Inputs } from "../types/inputs.type";
+import { getData, getSelectedCategories } from "../utils/common";
+
+type FormAddAndEditProps = {
+  keyNumber: number;
+  isEditing?: boolean;
+  onUpdate?: (value: boolean) => void;
+};
+
+export default function FormAddAndEdit({
+  keyNumber,
+  isEditing,
+  onUpdate,
+}: FormAddAndEditProps) {
+  const originalData = getData();
+  const [data, setData] = useState<Map<number, Inputs>>(originalData);
+  let selectedData: Inputs | undefined;
+  if (keyNumber) {
+    selectedData = data.get(keyNumber);
+  }
+
+  const selectedCategories = getSelectedCategories(originalData);
+
+  const defaultValues = {
+    question: "",
+    answer: "",
+    category: 0,
+    answers: [{ answer: "" }],
+    isOnceAgain: false,
+  };
+
+  const keysArray: number[] = data.size ? Array.from(data.keys()) : [];
+  let nextId: number = keyNumber
+    ? keyNumber
+    : data.size
+    ? keysArray[keysArray.length - 1]
+    : 0;
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    formState: { errors, isSubmitSuccessful },
+  } = useForm({
+    defaultValues,
+    mode: "onChange",
+  });
+
+  const { fields, append } = useFieldArray({
+    control,
+    name: "answers",
+  });
+
+  const onsubmit: SubmitHandler<Inputs> = (values) => {
+    if (!keyNumber) {
+      ++nextId;
+    }
+    data.set(nextId, values);
+    localStorage.setItem(
+      "EnglishConversationPractice",
+      JSON.stringify([...data])
+    );
+    setData(data);
+
+    if (keyNumber && onUpdate) {
+      onUpdate(!isEditing);
+    } else {
+      reset();
+    }
+  };
+
+  const onerror: SubmitErrorHandler<Inputs> = (err) => console.log(err);
+
+  const handleCancel = () => {
+    if (keyNumber && onUpdate) {
+      onUpdate(!isEditing);
+    } else {
+      reset();
+    }
+  };
+
+  useEffect(() => {
+    if (keyNumber) {
+      const selectedData = data.get(keyNumber);
+      if (selectedData) {
+        reset(selectedData);
+      }
+    } else {
+      reset({
+        question: "",
+        answer: "",
+        category: 0,
+        answers: [{ answer: "" }],
+      });
+    }
+  }, [keyNumber, selectedData, reset]);
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
+
+  return (
+    <Form onSubmit={handleSubmit(onsubmit, onerror)} noValidate>
+      <Form.Group className="mb-3">
+        <Form.Label htmlFor="question">質問（英語）</Form.Label>
+        <Form.Control
+          id="question"
+          as="textarea"
+          rows={5}
+          {...register("question", {
+            required: "必須です",
+          })}
+        />
+        <div className="text-danger pt-2">{errors.question?.message}</div>
+      </Form.Group>
+
+      <Form.Group className="mb-3">
+        <Form.Label htmlFor="answer">回答例（英語）</Form.Label>
+        <Form.Control
+          id="answer"
+          as="textarea"
+          rows={5}
+          {...register("answer", {
+            required: "必須です",
+          })}
+        />
+        <div className="text-danger pt-2">{errors.answer?.message}</div>
+      </Form.Group>
+      {fields.map((field: any, index: number) => (
+        <Form.Group className="mb-3" key={field.id}>
+          <Form.Label htmlFor={`answer${index + 2}`}>
+            回答例{index + 2}（英語）
+          </Form.Label>
+          <Form.Control
+            id={`answer${index + 2}`}
+            as="textarea"
+            rows={5}
+            {...register(`answers.${index}.answer`)}
+          />
+        </Form.Group>
+      ))}
+
+      <div className="text-end">
+        <Button
+          variant="primary"
+          className="py-2 px-4"
+          onClick={() => append({ answer: "" })}
+        >
+          追加する
+        </Button>
+      </div>
+
+      <Form.Group className="my-5">
+        <Form.Select aria-label="category" {...register("category")}>
+          {selectedCategories?.map((val) => (
+            <option value={val.categoryId} key={val.categoryId}>
+              {val.category}
+            </option>
+          ))}
+          <option value="1000000">選択しない</option>
+        </Form.Select>
+      </Form.Group>
+
+      <Form.Group className="d-none">
+        <Form.Check
+          inline
+          id="isOnceAgain"
+          label="もう一度"
+          {...register("isOnceAgain")}
+        />
+      </Form.Group>
+
+      <div className="text-center">
+        <Button
+          variant="primary"
+          type="button"
+          className="py-3 px-4 me-4"
+          onClick={handleCancel}
+        >
+          キャンセルする
+        </Button>
+        <Button variant="primary" type="submit" className="py-3 px-5">
+          登録する
+        </Button>
+      </div>
+    </Form>
+  );
+}
